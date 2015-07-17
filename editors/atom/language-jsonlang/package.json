@@ -1,0 +1,9 @@
+{
+  "name": "language-jsonlang",
+  "version": "0.0.1",
+  "description": "Syntax highlighting for JsonLang",
+  "engines": {
+    "atom": "*",
+    "node": "*"
+  }
+}
