@@ -1,11 +1,11 @@
-## Jsonnet Documentation
-The full url is http://iqstack.github.io/jsonnet
+## JsonLang Documentation
+The full url is http://iqstack.github.io/jsonlang
 From there you can click on the docs section
 
 
-Note: This is a branch of jsonnet but it will not show up on the project if you clone jsonnet. This was created by the following so that it keeps all of the docs and html separate from the source code for clarity:
+Note: This is a branch of jsonnet but it will not show up on the project if you clone jsonlang. This was created by the following so that it keeps all of the docs and html separate from the source code for clarity:
 
-1. Clone https://github.com/iqstack/jsonnet
+1. Clone https://github.com/iqstack/jsonlang
 2. git checkout iqstack
 3. mkdir gh-pages
 4. cd gh-pages
