@@ -7,13 +7,13 @@ i {
     font-family: Arial, sans-serif;
     font-weight: medium;
     font-style: italic;
-    color: #008 
+    color: #008
 }
 
 /* Value sets */
 em {
     font-family: Arial, sans-serif;
-    font-weight: medium; 
+    font-weight: medium;
     font-style: italic;
     color: #800
 }
@@ -67,7 +67,7 @@ div.rules {
 
 <h1>Specification</h1>
 
-<p> This page is the authority on what Jsonnet programs should do.  It defines Jsonnet syntax and
+<p> This page is the authority on what Jsonlang programs should do.  It defines Jsonlang syntax and
 parsing.  It describes which programs should be rejected statically (i.e. before execution).
 Finally, it specifies the manner in which the program is executed, i.e. the JSON that is output, or
 the dynamic error if there is one.</p>
@@ -77,7 +77,7 @@ subtleties and edge cases in order to allow fully-compatible reimplementations o
 well as analysis tools, refactoring tools, etc.  The specification employs some standard theoretical
 computer science techniques, namely <a href="http://en.wikipedia.org/wiki/Type_systems">type
 systems</a> and <a href="http://en.wikipedia.org/wiki/Operational_semantics">big step operational
-semantics</a>.  If that's not your cup of tea, then see the more discussive description of Jsonnet
+semantics</a>.  If that's not your cup of tea, then see the more discussive description of Jsonlang
 behavior in <a href="tutorial.html">tutorial</a>.</p>
 
 <h2>Abstract Syntax</h2>
@@ -321,7 +321,7 @@ the operators in the above list are currently parsed.  </p>
 
 <h2>Core Language Subset</h2>
 
-<p>In order to build a simpler model of Jsonnet's behavior, many of the language features are
+<p>In order to build a simpler model of Jsonlang's behavior, many of the language features are
 represented as syntax sugar.  Below, the core syntax is defined, and the desugaring function.  Both
 the static checking rules and the operational semantics are defined at the level of the core
 language, so it is reasonable to implement the desugaring in the parser.</p>
@@ -441,11 +441,11 @@ error construct if importing failed (e.g. due to I/O errors).  In the first case
 parsed, desugared, and subject to static checking before it can be substituted.  In the latter case,
 the file is substituted in the form of a string, so it merely needs to contain valid UTF-8.  </p>
 
-<p>A given Jsonnet file can be recursively imported via <code>import</code>. Thus, the
+<p>A given Jsonlang file can be recursively imported via <code>import</code>. Thus, the
 implementation loads files lazily (i.e.  during execution) as opposed to via static desugaring.  The
-imported Jsonnet file is parsed and statically checked in isolation.  Therefore, the behavior of the
+imported Jsonlang file is parsed and statically checked in isolation.  Therefore, the behavior of the
 import is not affected by the environment into which it is imported.  The files are cached by
-filename, so that even if the file changes on disk during Jsonnet execution, referential
+filename, so that even if the file changes on disk during Jsonlang execution, referential
 transparency is maintained.</p>
 
 <h3>Desugaring</h3>
@@ -622,7 +622,7 @@ Other cases invoke structural recursion.
 
 <h3>Static Checking</h3>
 
-<p> After the Jsonnet program is parsed and desugared, a syntax-directed algorithm is employed to
+<p> After the Jsonlang program is parsed and desugared, a syntax-directed algorithm is employed to
 reject programs that contain certain classes of errors.  This is presented like a static type
 system, except that there are no static types.  Programs are only rejected if they use undefined
 variables, or if <code>self</code>, <code>super</code> or <code>$</code> are used outside the bounds
@@ -631,7 +631,7 @@ checking is implicit in the checking of bound variables.  </p>
 
 <p> The static checking is described below as a judgement \(Γ ⊢ e\), where \(Γ\) is the set of
 variables in scope of \(e\).  The set \(Γ\) initially contains only <code>std</code>, the implicit
-standard library.  In the case of imported files, each jsonnet file is checked independently of the
+standard library.  In the case of imported files, each jsonlang file is checked independently of the
 other files.</p>
 
 
@@ -758,17 +758,17 @@ x ∈ Γ
 <h3>Operational Semantics</h3>
 
 <p> We present two sets of operational semantics rules.  The first defines the judgement \(e ↓ v\)
-which represents the execution of Jsonnet expressions into Jsonnet values.  The other defines the
-judgement \(v ⇓ j\) which represents <dfn>manifestation</dfn>, the process by which Jsonnet values
+which represents the execution of Jsonlang expressions into Jsonlang values.  The other defines the
+judgement \(v ⇓ j\) which represents <dfn>manifestation</dfn>, the process by which Jsonlang values
 are converted into JSON values.</p>
 
 <p> We model both explicit runtime errors (raised by the error construct) and implicit runtime
 errors (e.g. array bounds errors) as stuck execution.  Errors can occur both in the \(e ↓ v\)
 judgement and in the \(v ⇓ j\) judgement (because it is defined in terms of \(e ↓ v\)).</p>
 
-<h4>Jsonnet Values</h4>
+<h4>Jsonlang Values</h4>
 
-<p> Jsonnet values are the result of executing Jsonnet expressions.  These are not the same as JSON
+<p> Jsonlang values are the result of executing Jsonlang expressions.  These are not the same as JSON
 values, although there is some overlap.  In particular, they contain functions which are not
 representable in JSON, and both object fields and array elements have yet to be executed to yield
 values.</p>
@@ -956,8 +956,8 @@ of <i>e</i>.
 
 <h4>Execution</h4>
 
-<p>The following big step operational semantics rules define the execution of Jsonnet programs, i.e.
-the reduction of a Jsonnet program <i>e</i> into its Jsonnet value <i>v</i> via the judgement \(e ↓
+<p>The following big step operational semantics rules define the execution of Jsonlang programs, i.e.
+the reduction of a Jsonlang program <i>e</i> into its Jsonlang value <i>v</i> via the judgement \(e ↓
 v\).</p>
 
 
@@ -1127,12 +1127,12 @@ manifest equality, and object inheritance. The floating point arithmetic operati
 standard, except in the case of bitwise operations, where the number is first cast to a 64 bit
 signed integer for the operation, then cast back to a double.</p>
 
-<p>Equality has a subtle definition in Jsonnet, due to the desire for e.g.
+<p>Equality has a subtle definition in Jsonlang, due to the desire for e.g.
 
 <code>{x:1, y:self.x}</code> to compare equal to <code>{x:1, y: 1}</code>.  To permit this, equality
 is performed after manifesting the values being compared into JSON values, which binds self and
 fully evaluates all the fields.  One effect of this is that hidden fields are ignored when testing
-for equality.  There is another more fundamental reason why, even if two Jsonnet expressions
+for equality.  There is another more fundamental reason why, even if two Jsonlang expressions
 <i>e₁</i> and <i>e₂</i> compare equal with <code>==</code>, they cannot be substituted in an
 arbitrary context.  For example in the above case, <i>e₁</i><code> + {x: 2}</code> will yield
 <code>{x: 2, y: 2}</code>, whereas <i>e₂</i><code> + {x: 2}</code> will yield
@@ -1142,7 +1142,7 @@ languages, particularly those that perform automatic conversions on operands of 
 operator.</p>
 
 <p>The <code>error</code> operator cannot be expressed in our rules, as we model errors as stuck
-execution.  The semantics of <code>error</code> are that its subterm is evaluated to a Jsonnet
+execution.  The semantics of <code>error</code> are that its subterm is evaluated to a Jsonlang
 value.  If this is a string, then that is the error that is raised.  Otherwise, an error is raised
 complaining that the error message was not a string.  This specification does not specify how the
 error is presented to the user, and whether or not there is a stack trace.  Error messages are meant
@@ -1151,8 +1151,8 @@ for human inspection, and there is therefore no need to standardize them.</p>
 <h4>JSON Values</h4>
 
 <p>
-JSON values are unparsed to become the ultimate output of Jsonnet programs.  Hidden fields in
-Jsonnet objects are lost on the conversion to JSON.  Arrays elements and Object fields are fully evaluated.  Functions cannot be represented.
+JSON values are unparsed to become the ultimate output of Jsonlang programs.  Hidden fields in
+Jsonlang objects are lost on the conversion to JSON.  Arrays elements and Object fields are fully evaluated.  Functions cannot be represented.
 </p>
 
 <table>
@@ -1187,8 +1187,8 @@ unordered.  </p>
 <h4>Manifestation</h4>
 
 <p>
-Manifestation is the conversion of a Jsonnet value into a JSON value.  It is represented with the
-judgement \(v⇓j\).  The process requires executing arbitrary Jsonnet code fragments, so the two
+Manifestation is the conversion of a Jsonlang value into a JSON value.  It is represented with the
+judgement \(v⇓j\).  The process requires executing arbitrary Jsonlang code fragments, so the two
 semantic judgements represented by \(↓\) and \(⇓\) are mutually recursive.  Hidden fields are
 ignored during manifestation.  Functions cannot be manifested, so an error is raised in that
 case.</p>
@@ -1218,7 +1218,7 @@ o ⇓ j
 </div>
 
 
-<h3>Properties of Jsonnet Inheritance</h3>
+<h3>Properties of Jsonlang Inheritance</h3>
 
 <p> Let D, E, F range over arbitrary expressions.  Let ≡ mean contextual equivalence, i.e if D ≡ E
 then C[D] and C[E] will manifest to the same JSON, for any context C. Note that if D and E both

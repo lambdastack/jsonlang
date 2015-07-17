@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-CONTEXT = header.html.jinja footer.html.jinja ../examples/*.jsonnet ../examples/*.jsonnet.golden
+CONTEXT = header.html.jinja footer.html.jinja ../examples/*.jsonlang ../examples/*.jsonlang.golden
 PAGES = index.html \
 		userdocs.html tutorial.html demo.html stdlib.html \
 		casestudies.html casestudy_fractal.1.html casestudy_fractal.2.html casestudy_fractal.3.html \

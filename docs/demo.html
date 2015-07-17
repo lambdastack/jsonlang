@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Jsonnet - The Data Templating Language</title>
+    <title>Jsonlang - The Data Templating Language</title>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-    <meta name="keywords" content="Jsonnet, JSON, YAML, language, configuration, configuration language, functional, declarative, lazy, structured, elegant, semantics, clean, mixins, inheritance, template, expansion, expand" />
-    <meta name="description" content="The Jsonnet language allows elegant and easy description of JSON data." />
+    <meta name="keywords" content="Jsonlang, JSON, YAML, language, configuration, configuration language, functional, declarative, lazy, structured, elegant, semantics, clean, mixins, inheritance, template, expansion, expand" />
+    <meta name="description" content="The Jsonlang language allows elegant and easy description of JSON data." />
 
     <link rel="icon" type="image/png" href="favicon.png" />
 
@@ -16,21 +16,14 @@
     </script>
 
     <script type="text/javascript">
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-53570216-1', 'auto');
-      ga('send', 'pageview');
-
+    /*add google analytics*/
     </script>
 
     <script src="prism.js" type="text/javascript">
     </script>
 
     <script type="text/javascript">
-    Prism.languages.jsonnet = {
+    Prism.languages.jsonlang = {
       'cppcomment': /\/\/.*/g,
       'comment': /\/\*[\w\W]*?\*\//g,
       'string': /("|')(\\?.)*?\1/g,
@@ -124,22 +117,22 @@
             }
         }
 
-        document.onclick = menu_close_all(); 
+        document.onclick = menu_close_all();
 
     </script>
 
 </head>
 
-<body class="language-jsonnet">
+<body class="language-jsonlang">
 
 <div class="header">
 
 <div class="tagline"><i>The data templating language</i></div>
 <div id="githubmarkbox">
-<a href="https://groups.google.com/forum/#!forum/jsonnet"><div id="groupsmark"></div></a>
-<a href="http://github.com/google/jsonnet"><div id="githubmark"></div></a>
+<a href="https://groups.google.com/forum/#!forum/jsonlang"><div id="groupsmark"></div></a>
+<a href="http://github.com/google/jsonlang"><div id="githubmark"></div></a>
 </div>
-<div class="title"><a href="index.html" class="title">Jsonnet</a></div>
+<div class="title"><a href="index.html" class="title">Jsonlang</a></div>
 
 <ol id="menubar">
 
@@ -189,16 +182,16 @@
 
 </div>
 
-<script src="libjsonnet.js">
+<script src="libjsonlang.js">
 </script>
 
-<h1>Jsonnet Online Demo</h1>
+<h1>Jsonlang Online Demo</h1>
 
-<p> This Javascript <a href="javascript.html">build</a> of Jsonnet runs in your browser.  There is
+<p> This Javascript <a href="javascript.html">build</a> of Jsonlang runs in your browser.  There is
 no filesystem, so <code>import</code> will not find any files.  In most browsers, the textboxes can
 be made larger by dragging their bottom right corner.</p>
 
-<textarea class="demo-text" id=jsonnet-code rows="15" cols="100">
+<textarea class="demo-text" id=jsonlang-code rows="15" cols="100">
 local A = {
     x: 1,
     y: 2,
@@ -228,7 +221,7 @@ local A = {
 </table>
 
 
-<p>Don't know what to write?  The following links replace the above Jsonnet with various examples.
+<p>Don't know what to write?  The following links replace the above Jsonlang with various examples.
 </p>
 
 <ul>
@@ -281,11 +274,18 @@ Alice &amp; Bob
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.1.jsonnet
-<span class="example-code">/* bar_menu.1.jsonnet */
+Tutorial code: bar_menu.1.jsonlang
+<span class="example-code">/* bar_menu.1.jsonlang */
 {
+    local installed = false,
     cocktails: {
         // Ingredient quantities are in fluid ounces.
+        pip: {
+            package: &#34;rally&#34;,
+            state: if installed then &#34;present&#34; else &#34;absent&#34;,
+            mode: &#34;{{mode}}&#34;,
+            sudo: &#34;true&#34;,
+        },
         &#34;Tom Collins&#34;: {
             ingredients: [
                 { kind: &#34;Farmers Gin&#34;, qty: 1.5 },
@@ -307,13 +307,13 @@ Tutorial code: bar_menu.1.jsonnet
             served: &#34;Straight Up&#34;,
         },
     }
-} 
+}
 </span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.2.jsonnet
-<span class="example-code">// bar_menu.2.jsonnet
+Tutorial code: bar_menu.2.jsonlang
+<span class="example-code">// bar_menu.2.jsonlang
 {
     cocktails: {
         &#34;Tom Collins&#34;: {
@@ -323,15 +323,15 @@ Tutorial code: bar_menu.2.jsonnet
                 { kind: &#34;Simple Syrup&#34;, qty: 0.5 },
                 { kind: &#34;Soda&#34;, qty: 2 },
                 { kind: &#34;Angostura&#34;, qty: &#34;dash&#34; },
-            ],  
+            ],
             garnish: &#34;Maraschino Cherry&#34;,
             served: &#34;Tall&#34;,
-        },  
+        },
         Martini: {
             ingredients: [
                 {
                     // Evaluate a path to get the first ingredient of the Tom Collins.
-                    kind: $.cocktails[&#34;Tom Collins&#34;].ingredients[0].kind, 
+                    kind: $.cocktails[&#34;Tom Collins&#34;].ingredients[0].kind,
                     // or $[&#34;cocktails&#34;][&#34;Tom Collins&#34;][&#34;ingredients&#34;][0][&#34;kind&#34;],
                     qty: 1
                 },
@@ -341,17 +341,16 @@ Tutorial code: bar_menu.2.jsonnet
             served: &#34;Straight Up&#34;,
         },
         &#34;Gin Martini&#34;: self.Martini,
-    }   
-}   
-
+    }
+}
 </span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.3.jsonnet
-<span class="example-code">// bar_menu.3.jsonnet
+Tutorial code: bar_menu.3.jsonlang
+<span class="example-code">// bar_menu.3.jsonlang
 {
-    foo: 3,     
+    foo: 3,
     bar: 2 * self.foo,  // Multiplication.
     baz: &#34;The value &#34; + self.bar + &#34; is &#34;
          + (if self.bar &gt; 5 then &#34;large&#34; else &#34;small&#34;) + &#34;.&#34;,
@@ -363,8 +362,8 @@ Tutorial code: bar_menu.3.jsonnet
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: example_operators.jsonnet
-<span class="example-code">// example_operators.jsonnet
+Tutorial code: example_operators.jsonlang
+<span class="example-code">// example_operators.jsonlang
 {
     foo: [1, 2, 3],
     bar: [x * x for x in self.foo if x &gt;= 2],
@@ -375,15 +374,15 @@ Tutorial code: example_operators.jsonnet
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.5.jsonnet
-<span class="example-code">// bar_menu.5.jsonnet
+Tutorial code: bar_menu.5.jsonlang
+<span class="example-code">// bar_menu.5.jsonlang
 {
     cocktails: {
         &#34;Bee&#39;s Knees&#34;: {
             // Construct the ingredients by using 4/3 oz
-            // of each element in the given list. 
-            ingredients: [  // Array comprehension. 
-                { kind: i, qty: 4/3 } 
+            // of each element in the given list.
+            ingredients: [  // Array comprehension.
+                { kind: i, qty: 4/3 }
                 for i in [&#34;Honey Syrup&#34;, &#34;Lemon Juice&#34;, &#34;Farmers Gin&#34;]
             ],
             garnish: &#34;Lemon Twist&#34;,
@@ -407,7 +406,7 @@ Tutorial code: bar_menu.5.jsonnet
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.6.jsonnet (with inlined import)
+Tutorial code: bar_menu.6.jsonlang (with inlined import)
 <span class="example-code">local ImportedMartinis = {
     "Vodka Martini": {
         ingredients: [
@@ -429,7 +428,7 @@ Tutorial code: bar_menu.6.jsonnet (with inlined import)
     },
 };
 
-// bar_menu.6.jsonnet
+// bar_menu.6.jsonlang
 {
     cocktails: ImportedMartinis + {
         Manhattan: {
@@ -458,8 +457,8 @@ Tutorial code: bar_menu.6.jsonnet (with inlined import)
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.7.jsonnet (with inlined import)
-<span class="example-code">// bar_menu.7.jsonnet
+Tutorial code: bar_menu.7.jsonlang (with inlined import)
+<span class="example-code">// bar_menu.7.jsonlang
 local utils = {
     equal_parts(size, ingredients)::
         if std.length(ingredients) == 0 then
@@ -488,14 +487,14 @@ local utils = {
             garnish: "Orange Peel",
             served: "On The Rocks",
         },
-    }   
-}           
+    }
+}
 </span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.8.jsonnet
-<span class="example-code">// bar_menu.8.jsonnet
+Tutorial code: bar_menu.8.jsonlang
+<span class="example-code">// bar_menu.8.jsonlang
 {
     cocktails: {
         Negroni: {
@@ -511,13 +510,13 @@ Tutorial code: bar_menu.8.jsonnet
             served: &#34;On The Rocks&#34;,
         },
     }
-}           
+}
 </span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.9.jsonnet
-<span class="example-code">// bar_menu.9.jsonnet
+Tutorial code: bar_menu.9.jsonlang
+<span class="example-code">// bar_menu.9.jsonlang
 {
     cocktails: {
         &#34;Whiskey Sour&#34;: {
@@ -535,17 +534,12 @@ Tutorial code: bar_menu.9.jsonnet
         },
     }
 }
-
-
-
-
-
 </span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.10.jsonnet (with inlined import)
-<span class="example-code">// bar_menu.10.jsonnet
+Tutorial code: bar_menu.10.jsonlang (with inlined import)
+<span class="example-code">// bar_menu.10.jsonlang
 
 local Imported = {
     cocktails: {
@@ -607,30 +601,30 @@ Silly example: Fibonacci via recursive object (CAUTION: can be slow)
 
 <script>
 <!--
-function jsonnet_evaluate_snippet_wrapped(code) {
-    var jsonnet_make = Module.cwrap('jsonnet_make', 'number', [])
-    var jsonnet_realloc = Module.cwrap('jsonnet_realloc', 'number', ['number', 'number', 'number'])
-    var jsonnet_evaluate_snippet = Module.cwrap('jsonnet_evaluate_snippet', 'number', ['number', 'string', 'string', 'number'])
-    var jsonnet_destroy = Module.cwrap('jsonnet_destroy', 'number', ['number'])
+function jsonlang_evaluate_snippet_wrapped(code) {
+    var jsonlang_make = Module.cwrap('jsonlang_make', 'number', [])
+    var jsonlang_realloc = Module.cwrap('jsonlang_realloc', 'number', ['number', 'number', 'number'])
+    var jsonlang_evaluate_snippet = Module.cwrap('jsonlang_evaluate_snippet', 'number', ['number', 'string', 'string', 'number'])
+    var jsonlang_destroy = Module.cwrap('jsonlang_destroy', 'number', ['number'])
 
-    var vm = jsonnet_make();
+    var vm = jsonlang_make();
     var error_ptr = Module._malloc(4);
-    var output_ptr = jsonnet_evaluate_snippet(vm, "snippet", code, error_ptr);
+    var output_ptr = jsonlang_evaluate_snippet(vm, "snippet", code, error_ptr);
     var error = Module.getValue(error_ptr, 'i32*');
     Module._free(error_ptr);
     var result = Module.Pointer_stringify(output_ptr);
-    jsonnet_realloc(vm, output_ptr, 0);
-    jsonnet_destroy(vm);
+    jsonlang_realloc(vm, output_ptr, 0);
+    jsonlang_destroy(vm);
     return result;
 }
 function compute() {
-    var jsonnet_code = document.getElementById('jsonnet-code');
+    var jsonlang_code = document.getElementById('jsonlang-code');
     var json_output = document.getElementById('json-output');
-    json_output.value = jsonnet_evaluate_snippet_wrapped(jsonnet_code.value);
+    json_output.value = jsonlang_evaluate_snippet_wrapped(jsonlang_code.value);
 }
 function replace(dom) {
-    var jsonnet_code = document.getElementById('jsonnet-code');
-    jsonnet_code.value = dom.children[0].textContent;
+    var jsonlang_code = document.getElementById('jsonlang-code');
+    jsonlang_code.value = dom.children[0].textContent;
     compute();
 }
 replace(document.getElementById('initial-example'));

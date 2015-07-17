@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// bar_menu.8.jsonnet
+// bar_menu.8.jsonlang
 {
     cocktails: {
         Negroni: {
@@ -30,4 +30,4 @@ limitations under the License.
             served: "On The Rocks",
         },
     }
-}           
+}

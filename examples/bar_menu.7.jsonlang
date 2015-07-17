@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// bar_menu.7.jsonnet
-local utils = import "bar_menu_utils.jsonnet";
+// bar_menu.7.jsonlang
+local utils = import "bar_menu_utils.jsonlang";
 {
     local my_gin = "Farmers Gin",
     cocktails: {
@@ -34,6 +34,5 @@ local utils = import "bar_menu_utils.jsonnet";
             garnish: "Orange Peel",
             served: "On The Rocks",
         },
-    }   
-}           
-
+    }
+}

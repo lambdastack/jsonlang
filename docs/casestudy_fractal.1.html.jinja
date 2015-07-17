@@ -1,6 +1,6 @@
 {% include 'header.html.jinja' %}
 
-{% set srcroot = 'https://github.com/google/jsonnet/blob/master/case_studies' %}
+{% set srcroot = 'https://github.com/google/jsonlang/blob/master/case_studies' %}
 
 <h1 id=top>
 
@@ -15,17 +15,17 @@ Case Study: Fractal Cloud Application
 
 <h2 id=intro>Introduction</h2>
 
-<p> This case study illustrates that <a href="index.html">Jsonnet</a> can be used to centralize,
+<p> This case study illustrates that <a href="index.html">Jsonlang</a> can be used to centralize,
 unify, and manage configuration for all parts of a cloud hosted multi-tier web application (a
-Mandelbrot viewer).  Jsonnet centralizes configuration files for the various application software,
+Mandelbrot viewer).  Jsonlang centralizes configuration files for the various application software,
 database schemas and initial data sets, system configuration files, package manifests, software
 build configurations, image configurations (<a href="http://www.packer.io/">Packer</a>) and cloud
 resources / connectivity (<a href="http://www.terraform.io/">Terraform</a>).  Although the running
 example is deployed on <a href="https://cloud.google.com">Google Cloud Platform</a> and uses
-specific application software, Jsonnet can be used to generate configuration for any application and
+specific application software, Jsonlang can be used to generate configuration for any application and
 (via Packer &amp; Terraform) a wide range of cloud providers.</p>
 
-<p>  Prerequisites: It is assumed that the reader has read the Jsonnet <a
+<p>  Prerequisites: It is assumed that the reader has read the Jsonlang <a
 href="tutorial.html">tutorial</a>, and has a basic knowledge of Packer and Terraform.</p>
 
 <h2 id=app>Example Web Application</h2>
@@ -37,7 +37,7 @@ rendered server side, in C++).  The user is able to
 save the location of features they find, deep in the fractal, and a time-ordered list of these with
 thumbnails is displayed in the left hand pane.  The application is provisionally hosted <a
 href="http://www.fractaldemo.com/">here</a>, but you can easily deploy your own as all required files
-are available in the Jsonnet repository.</p>
+are available in the Jsonlang repository.</p>
 
 <p>Although admittedly a little contrived, this example is intended to represent the structure of a
 typical non-trivial real-world web application.  It is an example of micro-service architecture

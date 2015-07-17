@@ -1,6 +1,6 @@
 {% include 'header.html.jinja' %}
 
-{% set srcroot = 'https://github.com/google/jsonnet/blob/master/case_studies' %}
+{% set srcroot = 'https://github.com/google/jsonlang/blob/master/case_studies' %}
 
 <h1 id=top>
 
@@ -14,7 +14,7 @@ Case Study: Fractal Cloud Application
 <h2 id=using>Using The Configuration</h2>
 
 <p>The rest of this article gives simple methodologies for deploying and managing the fractal
-application by editing the Jsonnet configuration and then applying these changes.  In order to
+application by editing the Jsonlang configuration and then applying these changes.  In order to
 reproduce this case study there are a few pre-requisites:</p>
 
 <ul>
@@ -25,7 +25,7 @@ reproduce this case study there are a few pre-requisites:</p>
 
 <li>Terraform, built from github, in your $PATH.</li>
 
-<li>Jsonnet, built from github (this is also where you find the configuration and source code).</li>
+<li>Jsonlang, built from github (this is also where you find the configuration and source code).</li>
 
 <li>An account on Google Cloud Platform (hosting the application will incur charges).</li>
 
@@ -40,7 +40,7 @@ create a new service account.  This will automatic download a p12 key, which you
 will not be using it.  Instead, click the button to download a JSON key for the new service account,
 move it to the fractal directory, and call it <tt>service_account_key.json</tt>.</li>
 
-<li>Create a credentials.jsonnet file based on the template, fill in your GCP project name and make
+<li>Create a credentials.jsonlang file based on the template, fill in your GCP project name and make
 up some unique passwords.</li>
 
 </ol>
@@ -74,12 +74,12 @@ fundamental compute resources) and use of the Cassandra command line tool "nodet
 themselves.  For example "nodetool status fractal" on any Cassandra instance will give information
 about the whole cluster.</p>
 
-<p>To add a new node (expand the cluster), simply edit {{service_jsonnet|safe}}, add another
+<p>To add a new node (expand the cluster), simply edit {{service_jsonlang|safe}}, add another
 instance in the Terraform configuration and run make -j.  Confirm the changes (the only change
 should be the new instance, e.g., db4).  It will start up and soon become part of the cluster.</p>
 
 <p>To remove a node, first decommission it using nodetool -h HOSTNAME decommission.  When that is
-complete, destroy the actual instance by updating {{service_jsonnet|safe}} to remove the resource
+complete, destroy the actual instance by updating {{service_jsonlang|safe}} to remove the resource
 and run make -j again.  Confirm the removal of the instance.  It is OK to remove the first node, but
 its replacement should use <tt>GcpTopUpMixin</tt> instead of <tt>GcpStarterMixin</tt>.  You can
 recycle all of the nodes if you do it one at a time, which is actually necessary for emergency
@@ -103,11 +103,11 @@ The same can be said for the tile generation service (e.g. to update the C++ cod
 <p>The model used by this example is that the application server logic and static content are
 embedded in the application server image.  Canarying consists of building a new image and then
 rolling it out gradually one instance at a time.  Each step of this methodology consists of a small
-modification to {{service_jsonnet|safe}} and then running make -j.</p>
+modification to {{service_jsonlang|safe}} and then running make -j.</p>
 
 <ol>
 
-<li>Edit the <tt>appserv.packer.json</tt> packer configuration in {{service_jsonnet|safe}} to update
+<li>Edit the <tt>appserv.packer.json</tt> packer configuration in {{service_jsonlang|safe}} to update
 the date embedded in the <tt>name</tt> field to the current date, and also make any desired changes
 to the configuration of the image or any of the referenced Python / HTML / CSS files.</li>
 
@@ -117,7 +117,7 @@ This feature is essential to allow ongoing maintenance of the cluster if the cha
 back.</li>
 
 <li>Create a single instance with the new image by adding it to the <tt>google_compute_instance</tt>
-section of {{service_jsonnet|safe}}.  The easiest way to do this is to copy-paste the existing
+section of {{service_jsonlang|safe}}.  The easiest way to do this is to copy-paste the existing
 definition, and modify the image name in the copy to reflect the new image.  This allows easily
 rolling back by deleting the copied code, and you can also transition the rest of the nodes by
 deleting the original copy.  Thus, the duplication is only temporary.  At this point the
@@ -195,7 +195,7 @@ first block no-longer contributes anything to the configuration and it can be de
 
 <h2 id=conclusion>Conclusion</h2>
 
-<p>We have shown how Jsonnet can be used to centralize, unify, and manage configuration for a
+<p>We have shown how Jsonlang can be used to centralize, unify, and manage configuration for a
 realistic cloud application.  We have demonstrated how programming language abstraction techniques
 make the configuration very concise, with re-usable elements separated into template libraries.
 Complexity is controlled in spite of the variety of different configurations, formats, and tasks
@@ -203,7 +203,7 @@ involved.</p>
 
 <p>Finally we demonstrated how with a little procedural glue to drive other processes (the humble
 UNIX make), we were able to build an operations methodology where many aspects of the service can be
-controlled centrally by editing a single Jsonnet file and issuing make -j update commands.</p>
+controlled centrally by editing a single Jsonlang file and issuing make -j update commands.</p>
 
 <p class=jump_to_page>Pages <a href="casestudy_fractal.1.html">1</a>, <a
 href="casestudy_fractal.2.html">2</a>, 3</p>

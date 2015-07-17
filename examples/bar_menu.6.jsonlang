@@ -14,38 +14,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// bar_menu.11.jsonnet
+// bar_menu.6.jsonlang
 {
-    local name = "Gin Fizz",
-    local brunch = true,
-    cocktails: {
-        [name]: {
+    cocktails: import "martinis.jsonlang" + {
+        Manhattan: {
             ingredients: [
-                { kind: "Farmers Gin", qty: 1.5 },
-                { kind: "Lemon", qty: 1 },
-                { kind: "Simple Syrup", qty: 0.5 },
-                { kind: "Soda", qty: 2 },
+                { kind: "Rye", qty: 2.5 },
+                { kind: "Sweet Red Vermouth", qty: 1 },
                 { kind: "Angostura", qty: "dash" },
             ],
             garnish: "Maraschino Cherry",
-            served: "Tall",
+            served: "Straight Up",
         },
-
-        [if brunch then "Bloody Mary"]: {
+        Cosmopolitan: {
             ingredients: [
-                { kind: "Vokda", qty: 1.5 },
-                { kind: "Tomato Juice", qty: 3 },
-                { kind: "Lemon Juice", qty: 1.5 },
-                { kind: "Worcestershire Sauce", qty: 0.25 },
-                { kind: "Tobasco Sauce", qty: 0.15 },
+                { kind: "Vodka", qty: 1.5 },
+                { kind: "Cointreau", qty: 1 },
+                { kind: "Cranberry Juice", qty: 2 },
+                { kind: "Lime Juice", qty: 1 },
             ],
-            garnish: "Celery salt & pepper",
-            served: "Tall",
+            garnish: "Lime Wheel",
+            served: "Straight Up",
         },
     }
 }
-
-
-
-
-

@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// bar_menu.5.jsonnet
+// bar_menu.5.jsonlang
 {
     cocktails: {
         "Bee's Knees": {
             // Construct the ingredients by using 4/3 oz
-            // of each element in the given list. 
-            ingredients: [  // Array comprehension. 
-                { kind: i, qty: 4/3 } 
+            // of each element in the given list.
+            ingredients: [  // Array comprehension.
+                { kind: i, qty: 4/3 }
                 for i in ["Honey Syrup", "Lemon Juice", "Farmers Gin"]
             ],
             garnish: "Lemon Twist",

@@ -1,15 +1,15 @@
 {% include 'header.html.jinja' %}
 
-<script src="libjsonnet.js">
+<script src="libjsonlang.js">
 </script>
 
-<h1>Jsonnet Online Demo</h1>
+<h1>Jsonlang Online Demo</h1>
 
-<p> This Javascript <a href="javascript.html">build</a> of Jsonnet runs in your browser.  There is
+<p> This Javascript <a href="javascript.html">build</a> of Jsonlang runs in your browser.  There is
 no filesystem, so <code>import</code> will not find any files.  In most browsers, the textboxes can
 be made larger by dragging their bottom right corner.</p>
 
-<textarea class="demo-text" id=jsonnet-code rows="15" cols="100">
+<textarea class="demo-text" id=jsonlang-code rows="15" cols="100">
 local A = {
     x: 1,
     y: 2,
@@ -39,49 +39,49 @@ local A = {
 </table>
 
 
-<p>Don't know what to write?  The following links replace the above Jsonnet with various examples.
+<p>Don't know what to write?  The following links replace the above Jsonlang with various examples.
 </p>
 
 <ul>
 
 <li><a id="initial-example" href="" onclick='replace(this) ; return false;'>
 Build script example
-<span class="example-code">{{ myinclude('../examples/build_example.jsonnet') }}</span>
+<span class="example-code">{{ myinclude('../examples/build_example.jsonlang') }}</span>
 </a></li>
 
 
 <li><a href="" onclick='replace(this) ; return false;'>
 Alice &amp; Bob
-<span class="example-code">{{ myinclude('../examples/landingpage.jsonnet') }}</span>
+<span class="example-code">{{ myinclude('../examples/landingpage.jsonlang') }}</span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.1.jsonnet
-<span class="example-code">{{ myinclude('../examples/bar_menu.1.jsonnet') }}</span>
+Tutorial code: bar_menu.1.jsonlang
+<span class="example-code">{{ myinclude('../examples/bar_menu.1.jsonlang') }}</span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.2.jsonnet
-<span class="example-code">{{ myinclude('../examples/bar_menu.2.jsonnet') }}</span>
+Tutorial code: bar_menu.2.jsonlang
+<span class="example-code">{{ myinclude('../examples/bar_menu.2.jsonlang') }}</span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.3.jsonnet
-<span class="example-code">{{ myinclude('../examples/bar_menu.3.jsonnet') }}</span>
+Tutorial code: bar_menu.3.jsonlang
+<span class="example-code">{{ myinclude('../examples/bar_menu.3.jsonlang') }}</span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: example_operators.jsonnet
-<span class="example-code">{{ myinclude('../examples/example_operators.jsonnet') }}</span>
+Tutorial code: example_operators.jsonlang
+<span class="example-code">{{ myinclude('../examples/example_operators.jsonlang') }}</span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.5.jsonnet
-<span class="example-code">{{ myinclude('../examples/bar_menu.5.jsonnet') }}</span>
+Tutorial code: bar_menu.5.jsonlang
+<span class="example-code">{{ myinclude('../examples/bar_menu.5.jsonlang') }}</span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.6.jsonnet (with inlined import)
+Tutorial code: bar_menu.6.jsonlang (with inlined import)
 <span class="example-code">local ImportedMartinis = {
     "Vodka Martini": {
         ingredients: [
@@ -103,7 +103,7 @@ Tutorial code: bar_menu.6.jsonnet (with inlined import)
     },
 };
 
-// bar_menu.6.jsonnet
+// bar_menu.6.jsonlang
 {
     cocktails: ImportedMartinis + {
         Manhattan: {
@@ -132,8 +132,8 @@ Tutorial code: bar_menu.6.jsonnet (with inlined import)
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.7.jsonnet (with inlined import)
-<span class="example-code">// bar_menu.7.jsonnet
+Tutorial code: bar_menu.7.jsonlang (with inlined import)
+<span class="example-code">// bar_menu.7.jsonlang
 local utils = {
     equal_parts(size, ingredients)::
         if std.length(ingredients) == 0 then
@@ -162,24 +162,24 @@ local utils = {
             garnish: "Orange Peel",
             served: "On The Rocks",
         },
-    }   
-}           
+    }
+}
 </span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.8.jsonnet
-<span class="example-code">{{ myinclude('../examples/bar_menu.8.jsonnet') }}</span>
+Tutorial code: bar_menu.8.jsonlang
+<span class="example-code">{{ myinclude('../examples/bar_menu.8.jsonlang') }}</span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.9.jsonnet
-<span class="example-code">{{ myinclude('../examples/bar_menu.9.jsonnet') }}</span>
+Tutorial code: bar_menu.9.jsonlang
+<span class="example-code">{{ myinclude('../examples/bar_menu.9.jsonlang') }}</span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
-Tutorial code: bar_menu.10.jsonnet (with inlined import)
-<span class="example-code">// bar_menu.10.jsonnet
+Tutorial code: bar_menu.10.jsonlang (with inlined import)
+<span class="example-code">// bar_menu.10.jsonlang
 
 local Imported = {
     cocktails: {
@@ -215,42 +215,42 @@ Imported {
 
 <li><a href="" onclick='replace(this) ; return false;'>
 Silly example: Fibonacci via recursive function
-<span class="example-code">{{ myinclude('../benchmarks/bench.03.jsonnet') }}</span>
+<span class="example-code">{{ myinclude('../benchmarks/bench.03.jsonlang') }}</span>
 </a></li>
 
 <li><a href="" onclick='replace(this) ; return false;'>
 Silly example: Fibonacci via recursive object (CAUTION: can be slow)
-<span class="example-code">{{ myinclude('../benchmarks/bench.02.jsonnet') }}</span>
+<span class="example-code">{{ myinclude('../benchmarks/bench.02.jsonlang') }}</span>
 </a></li>
 
 </ul>
 
 <script>
 <!--
-function jsonnet_evaluate_snippet_wrapped(code) {
-    var jsonnet_make = Module.cwrap('jsonnet_make', 'number', [])
-    var jsonnet_realloc = Module.cwrap('jsonnet_realloc', 'number', ['number', 'number', 'number'])
-    var jsonnet_evaluate_snippet = Module.cwrap('jsonnet_evaluate_snippet', 'number', ['number', 'string', 'string', 'number'])
-    var jsonnet_destroy = Module.cwrap('jsonnet_destroy', 'number', ['number'])
+function jsonlang_evaluate_snippet_wrapped(code) {
+    var jsonlang_make = Module.cwrap('jsonlang_make', 'number', [])
+    var jsonlang_realloc = Module.cwrap('jsonlang_realloc', 'number', ['number', 'number', 'number'])
+    var jsonlang_evaluate_snippet = Module.cwrap('jsonlang_evaluate_snippet', 'number', ['number', 'string', 'string', 'number'])
+    var jsonlang_destroy = Module.cwrap('jsonlang_destroy', 'number', ['number'])
 
-    var vm = jsonnet_make();
+    var vm = jsonlang_make();
     var error_ptr = Module._malloc(4);
-    var output_ptr = jsonnet_evaluate_snippet(vm, "snippet", code, error_ptr);
+    var output_ptr = jsonlang_evaluate_snippet(vm, "snippet", code, error_ptr);
     var error = Module.getValue(error_ptr, 'i32*');
     Module._free(error_ptr);
     var result = Module.Pointer_stringify(output_ptr);
-    jsonnet_realloc(vm, output_ptr, 0);
-    jsonnet_destroy(vm);
+    jsonlang_realloc(vm, output_ptr, 0);
+    jsonlang_destroy(vm);
     return result;
 }
 function compute() {
-    var jsonnet_code = document.getElementById('jsonnet-code');
+    var jsonlang_code = document.getElementById('jsonlang-code');
     var json_output = document.getElementById('json-output');
-    json_output.value = jsonnet_evaluate_snippet_wrapped(jsonnet_code.value);
+    json_output.value = jsonlang_evaluate_snippet_wrapped(jsonlang_code.value);
 }
 function replace(dom) {
-    var jsonnet_code = document.getElementById('jsonnet-code');
-    jsonnet_code.value = dom.children[0].textContent;
+    var jsonlang_code = document.getElementById('jsonlang-code');
+    jsonlang_code.value = dom.children[0].textContent;
     compute();
 }
 replace(document.getElementById('initial-example'));

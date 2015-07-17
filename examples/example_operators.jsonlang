@@ -14,8 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// hidden_fields.jsonnet
+// example_operators.jsonlang
 {
-    local Base = { w: 1, x: 2, y:: 3, z:: 4 },
-    foo: Base { w: super.w, x:: super.x, y: super.y, z::: super.z},
+    foo: [1, 2, 3],
+    bar: [x * x for x in self.foo if x >= 2],
+    baz: { ["field" + x]: x for x in self.foo },
+    obj: { ["foo" + "bar"]: 3 },
 }

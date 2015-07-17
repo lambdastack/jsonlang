@@ -2,12 +2,12 @@
 
 <h1>Tutorial</h1>
 
-<p> This page is a guided tour through the Jsonnet language, from its most basic features to its
+<p> This page is a guided tour through the Jsonlang language, from its most basic features to its
 powerful object model, punctuated with examples drawn from the world of cocktails.  These examples
 are meant to be fun, and although a little contrived, do not restrict our thinking to any one
-particular application of Jsonnet.</p>
+particular application of Jsonlang.</p>
 
-<p>Caveat: Note that Jsonnet unparses JSON in a simple way.  In particular, it alphabetically
+<p>Caveat: Note that Jsonlang unparses JSON in a simple way.  In particular, it alphabetically
 reorders object fields in its output.  This is natural and compatible with JSON, since if order is
 meaningful, an array of pairs should be used instead of an object.  Also, unparsing JSON using a
 canonical ordering of field names makes it possible to use diff to compare outputs.  However, the
@@ -18,23 +18,23 @@ equivalent).</p>
 
 <h2>Simple Syntax Improvements</h2>
 
-<p> In Jsonnet, unlike JSON, sufficiently simple object fields (the strings to the left of the
+<p> In Jsonlang, unlike JSON, sufficiently simple object fields (the strings to the left of the
 colon) do not need quotes if their names are valid identifiers (i.e. match the regular expression
 [a-zA-Z_][a-zA-Z0-9_]*).  In JSON, commas are not allowed at the end of arrays / objects, which can
-make writing JSON painful if you need to reorder an array or delete the last element.  In Jsonnet,
-extra commas are allowed but not required.  Jsonnet also allows both C and C++ style comments.</p>
+make writing JSON painful if you need to reorder an array or delete the last element.  In Jsonlang,
+extra commas are allowed but not required.  Jsonlang also allows both C and C++ style comments.</p>
 
 <table>
 <tr>
-<td><span class="TableHeader">Input (Jsonnet)</span></td>
+<td><span class="TableHeader">Input (Jsonlang)</span></td>
 <td><span class="TableHeader">Output (JSON)</span></td>
 </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.1.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.1.jsonlang') }}</code></pre>
 </td>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.1.jsonnet.golden') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.1.jsonlang.golden') }}</code></pre>
 </td>
 </tr>
 </table>
@@ -61,16 +61,16 @@ like if the dot operator was not taken advantage of.</p>
 object).</p>
 
 <table>
-<tr> <td><span class="TableHeader">Input (Jsonnet)</span></td> </tr>
+<tr> <td><span class="TableHeader">Input (Jsonlang)</span></td> </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.2.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.2.jsonlang') }}</code></pre>
 </td>
 </tr>
 <tr><td><span class="TableHeader">Output (JSON)</span></td></tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.2.jsonnet.golden') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.2.jsonlang.golden') }}</code></pre>
 </td>
 </tr>
 </table>
@@ -79,14 +79,14 @@ object).</p>
 
 <h3>Arithmetic and Conditionals</h3>
 
-<p>Jsonnet has constructs for manipulating data.  There are the usual arithmetic operators on
+<p>Jsonlang has constructs for manipulating data.  There are the usual arithmetic operators on
 numbers (double precision floating point), booleans, and strings.  The + operator acts on arrays and
 strings to concatenate them.  It also acts on objects by fusing the two objects, i.e. yielding a new
 object with all of the fields and values from both.  In the event that the two objects both define
 the same field, then the resulting object will use the value from the object that was on the right
 hand side of the +. </p>
 
-<p>There is an <code>if</code> construct for conditional code.  Since Jsonnet is an
+<p>There is an <code>if</code> construct for conditional code.  Since Jsonlang is an
 expression language, the conditional behaves more like the ternary "?:" operator in C, or the "a if
 b else c" syntax of Python, in that it can be embedded in the middle of an expression.</p>
 
@@ -96,15 +96,15 @@ not Javascript).</p>
 
 <table>
 <tr>
-<td><span class="TableHeader">Input (Jsonnet)</span></td>
+<td><span class="TableHeader">Input (Jsonlang)</span></td>
 <td><span class="TableHeader">Output (JSON)</span></td>
 </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.3.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.3.jsonlang') }}</code></pre>
 </td>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.3.jsonnet.golden') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.3.jsonlang.golden') }}</code></pre>
 </td>
 </tr>
 </table>
@@ -121,15 +121,15 @@ example.</p>
 
 <table>
 <tr>
-<td><span class="TableHeader">Input (Jsonnet)</span></td>
+<td><span class="TableHeader">Input (Jsonlang)</span></td>
 <td><span class="TableHeader">Output (JSON)</span></td>
 </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/example_operators.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/example_operators.jsonlang') }}</code></pre>
 </td>
 <td>
-<pre><code>{{ myinclude('../examples/example_operators.jsonnet.golden') }}</code></pre>
+<pre><code>{{ myinclude('../examples/example_operators.jsonlang.golden') }}</code></pre>
 </td>
 </tr>
 </table>
@@ -146,15 +146,15 @@ together to produce a single record for the "cocktails" field. </p>
 
 <table>
 <tr>
-<td><span class="TableHeader">Input (Jsonnet)</span></td>
+<td><span class="TableHeader">Input (Jsonlang)</span></td>
 <td><span class="TableHeader">Output (JSON)</span></td>
 </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.5.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.5.jsonlang') }}</code></pre>
 </td>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.5.jsonnet.golden') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.5.jsonlang.golden') }}</code></pre>
 </td>
 </tr>
 </table>
@@ -162,26 +162,26 @@ together to produce a single record for the "cocktails" field. </p>
 
 <h2>Modularity and Encapsulation</h2>
 
-<p>As the amount of JSON grows, its size makes it harder to manage.  Jsonnet has various constructs
-to help.  A file can be broken into parts, as one Jsonnet file can import other Jsonnet files (and
+<p>As the amount of JSON grows, its size makes it harder to manage.  Jsonlang has various constructs
+to help.  A file can be broken into parts, as one Jsonlang file can import other Jsonlang files (and
 therefore other JSON files).  Values can be held in local variables and fields, which are only
 visible within their scopes.  Functions can be defined to factor out common descriptions, and error
-statements can be used to validate inputs.  Jsonnet provides a standard library that is implicitly
+statements can be used to validate inputs.  Jsonlang provides a standard library that is implicitly
 imported and contains useful functions for data manipulation, among other things.</p>
 
 <h3>Imports</h3>
 
 <p>The first example below factors out some cocktails into a separate file.  This may be useful to
 allow concurrent modifications by different mixologists.  The <code>import</code> construct yields
-the content of the <tt>martinis.jsonnet</tt> file.  The <code>+</code> operator is object
+the content of the <tt>martinis.jsonlang</tt> file.  The <code>+</code> operator is object
 concatenation, which combines two objects to form a single object.  Note that the Cosmopolitan field
 is defined in both files, so the one on the right hand side is used.  This means that
-<tt>bar_menu.jsonnet</tt> has overridden the recipe from <tt>martinis.jsonnet</tt> with a different
+<tt>bar_menu.jsonlang</tt> has overridden the recipe from <tt>martinis.jsonlang</tt> with a different
 recipe (one that uses Cointreau instead of Triple Sec, among other changes).</p>
 
-<pre><code>{{ myinclude('../examples/martinis.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/martinis.jsonlang') }}</code></pre>
 
-<pre><code>{{ myinclude('../examples/bar_menu.6.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.6.jsonlang') }}</code></pre>
 
 <h3>Functions</h3>
 
@@ -194,23 +194,23 @@ the quantity, thus avoiding the exposure of implementation details.</p>
 <p>There is also an identity function defined.  This is there to demonstrate that function
 definitions are really just syntax sugar for closures that are assigned to a field.</p>
 
-<pre><code>{{ myinclude('../examples/bar_menu_utils.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu_utils.jsonlang') }}</code></pre>
 
 <p>Finally, you may have noticed that two colons are used instead of one.  This marks the field as
 being <dfn>hidden</dfn>, i.e. it will not appear in the JSON output.  The field can still be
-accessed by Jsonnet code, so it is not like the private/protected modifier that some languages have.
+accessed by Jsonlang code, so it is not like the private/protected modifier that some languages have.
 Hidden fields are convenient for functions, which cannot be manifestated in the JSON output.  It has
 other uses too, as we will see in the later section on object orientation.</p>
 
 <h3>Local Variables</h3>
 
-<p>Like most languages, Jsonnet has <dfn>variables</dfn>, which can be used to factor out
+<p>Like most languages, Jsonlang has <dfn>variables</dfn>, which can be used to factor out
 expressions.  They are referenced using standard static <a
 href="http://en.wikipedia.org/wiki/Scope_(computer_science)">scoping</a> rules.  In the following
 case, the imported object is stored in the variable, which is later referenced to access the
 <code>equal_parts</code> function.  It is also possible to store the import in a field of the root
 object, and access it with <code>$</code>.  In that case, it should be a hidden field (using the ::
-syntax) in order to avoid appearing in the output of <code>bar_menu.7.jsonnet</code>.</p>
+syntax) in order to avoid appearing in the output of <code>bar_menu.7.jsonlang</code>.</p>
 
 <table>
 <tr>
@@ -219,10 +219,10 @@ syntax) in order to avoid appearing in the output of <code>bar_menu.7.jsonnet</c
 </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.7.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.7.jsonlang') }}</code></pre>
 </td>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.7.jsonnet.golden') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.7.jsonlang.golden') }}</code></pre>
 </td>
 </tr>
 </table>
@@ -254,10 +254,10 @@ to a stashing <code>self</code> in a variable at the outermost object.</p>
 </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.8.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.8.jsonlang') }}</code></pre>
 </td>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.8.jsonnet.golden') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.8.jsonlang.golden') }}</code></pre>
 </td>
 </tr>
 </table>
@@ -265,7 +265,7 @@ to a stashing <code>self</code> in a variable at the outermost object.</p>
 
 <h3>Stack Traces</h3>
 
-<p> Jsonnet provides stack traces when an error is raised.  Here is an example, where we provide an
+<p> Jsonlang provides stack traces when an error is raised.  Here is an example, where we provide an
 empty list of ingredients to the <code>equal_parts</code> function.  </p>
 
 <table>
@@ -275,17 +275,17 @@ empty list of ingredients to the <code>equal_parts</code> function.  </p>
 </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/no_ingredients.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/no_ingredients.jsonlang') }}</code></pre>
 </td>
 <td>
-<pre>{{ myinclude('../examples/no_ingredients.jsonnet.error') }}</pre>
+<pre>{{ myinclude('../examples/no_ingredients.jsonlang.error') }}</pre>
 </td>
 </tr>
 </table>
 
 <h2>Object-Orientation</h2>
 
-<p>Finally, we see how Jsonnet provides the abstraction mechanisms of object oriented programming,
+<p>Finally, we see how Jsonlang provides the abstraction mechanisms of object oriented programming,
 to allow the writing of base templates that can be extended for a variety of purposes.</p>
 
 <p>The object concatenation operator <code>+</code> can be used to override fields from one object
@@ -305,16 +305,16 @@ the <code>super.ingredients + </code> would result in a cocktail containing only
 </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.9.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.9.jsonlang') }}</code></pre>
 </td>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.9.jsonnet.golden') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.9.jsonlang.golden') }}</code></pre>
 </td>
 </tr>
 </table>
 
 
-<p>The key to making Jsonnet object-oriented is that the <code>self</code> keyword be "late bound".
+<p>The key to making Jsonlang object-oriented is that the <code>self</code> keyword be "late bound".
 This is illustrated in the next example, where an alternative menu is derived from the above.  It
 takes the original menu, and replaces the cocktails object with a new object that is in turn based
 on the original menu's cocktail object.  But this new cocktail object overrides the Whiskey sour,
@@ -341,10 +341,10 @@ addition, so it could also have been used in the previous example to add the egg
 </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.10.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.10.jsonlang') }}</code></pre>
 </td>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.10.jsonnet.golden') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.10.jsonlang.golden') }}</code></pre>
 </td>
 </tr>
 </table>
@@ -367,17 +367,17 @@ overrides the hidden status from <code>Base</code> to make the field visible in 
 </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/hidden_fields.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/hidden_fields.jsonlang') }}</code></pre>
 </td>
 <td>
-<pre><code>{{ myinclude('../examples/hidden_fields.jsonnet.golden') }}</code></pre>
+<pre><code>{{ myinclude('../examples/hidden_fields.jsonlang.golden') }}</code></pre>
 </td>
 </tr>
 </table>
 
 <h2>Computed and Optional Fields</h2>
 
-<p>In order to support objects whose keys are unknown until run-time, Jsonnet has a syntax allowing
+<p>In order to support objects whose keys are unknown until run-time, Jsonlang has a syntax allowing
 the field name to be computed, or omitted entirely.  The syntax is similar to object comprehension,
 which is also a kind of computed field.</p>
 
@@ -388,10 +388,10 @@ which is also a kind of computed field.</p>
 </tr>
 <tr>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.11.jsonnet') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.11.jsonlang') }}</code></pre>
 </td>
 <td>
-<pre><code>{{ myinclude('../examples/bar_menu.11.jsonnet.golden') }}</code></pre>
+<pre><code>{{ myinclude('../examples/bar_menu.11.jsonlang.golden') }}</code></pre>
 </td>
 </tr>
 </table>

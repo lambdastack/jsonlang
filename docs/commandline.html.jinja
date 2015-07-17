@@ -2,15 +2,15 @@
 
 <h1 id=cmdline_tool>Commandline Tool</h1>
 
-<p>The commandline tool "jsonnet" will evaluate Jsonnet and emit JSON on stdout.  It can evaluate
+<p>The commandline tool "jsonlang" will evaluate Jsonlang and emit JSON on stdout.  It can evaluate
 snippets of code, or files (by filename).  It is actually a commandline wrapper around the C API, a
-convenient way to evaluate Jsonnet code from shell scripts, build tools, or languages that do not
+convenient way to evaluate Jsonlang code from shell scripts, build tools, or languages that do not
 yet have a library binding.</p>
 
 <h2 id=building>Building</h2>
 
 <p>The commandline tool will be built by simply invoking 'make', as it is the sole default
-target.  It can be built explicitly with 'make jsonnet'.</p>
+target.  It can be built explicitly with 'make jsonlang'.</p>
 
 <h2 id=usage>Usage</h2>
 
@@ -19,7 +19,7 @@ target.  It can be built explicitly with 'make jsonnet'.</p>
 <pre>
 Usage:
 Usage:
-jsonnet {&lt;option&gt;} [&lt;filename&gt;]
+jsonlang {&lt;option&gt;} [&lt;filename&gt;]
 where &lt;filename&gt; defaults to - (stdin)
 and &lt;option&gt; can be:
   -h / --help             This message
@@ -37,8 +37,8 @@ and &lt;option&gt; can be:
   --version               Print version
 Multichar options are expanded e.g. -abc becomes -a -b -c.
 The -- option suppresses option processing for subsequent arguments.
-Note that since jsonnet programs can begin with -, it is advised to
-use -- with -e if the program is unknown, e.g. jsonnet -e -- "$CODE".
+Note that since jsonlang programs can begin with -, it is advised to
+use -- with -e if the program is unknown, e.g. jsonlang -e -- "$CODE".
 </pre>
 
 <h2>Example</h2>
@@ -46,7 +46,7 @@ use -- with -e if the program is unknown, e.g. jsonnet -e -- "$CODE".
 <p>Evaluating a file.</p>
 
 <pre>
-~/jsonnet/examples$ jsonnet landingpage.jsonnet
+~/jsonlang/examples$ jsonlang landingpage.jsonlang
 {
    "person1": {
       "name": "Alice",
@@ -62,7 +62,7 @@ use -- with -e if the program is unknown, e.g. jsonnet -e -- "$CODE".
 <p>Evaluating a snippet.</p>
 
 <pre>
-~/jsonnet/examples$ jsonnet -e '{ x: 1 , y: self.x + 1 } { x: 10 }'
+~/jsonlang/examples$ jsonlang -e '{ x: 1 , y: self.x + 1 } { x: 10 }'
 {
    "x": 10,
    "y": 11
@@ -71,13 +71,13 @@ use -- with -e if the program is unknown, e.g. jsonnet -e -- "$CODE".
 
 <h2 id=multi>Multiple file output</h2>
 
-<p>The Jsonnet commandline tool has a special mode for generating multiple JSON files from a single
-Jsonnet file.  This can be useful if you want to avoid writing lots of small Jsonnet files, or if
+<p>The Jsonlang commandline tool has a special mode for generating multiple JSON files from a single
+Jsonlang file.  This can be useful if you want to avoid writing lots of small Jsonlang files, or if
 you want to take advantage of cross-references and interdependencies between the files.  The idea is
 to create a single JSON structure, the top level of which defines the various files.  The following
 example shows how to do it: </p>
 
-<pre class="large"><code>// multiple_output.jsonnet
+<pre class="large"><code>// multiple_output.jsonlang
 {
     "a.json": {
         x: 1,
@@ -90,22 +90,22 @@ example shows how to do it: </p>
 }
 </code></pre>
 
-<p>When executed using jsonnet -m, this will write the generated JSON to files a.json and b.json
+<p>When executed using jsonlang -m, this will write the generated JSON to files a.json and b.json
 instead of to stdout.  In order to integrate nicely with build tools like make, the files are not
 touched if they already contain the content that would be written to them.  To stdout is printed the
 list of files (either written or already containing the right data).  This makes it easy to drive
 other tools that operate on the JSON files.</p>
 
 <pre>
-$ jsonnet -m multiple_output.jsonnet
+$ jsonlang -m multiple_output.jsonlang
 a.json
 b.json
-$ cat a.json 
+$ cat a.json
 {
    "x": 1,
    "y": 2
 }
-$ cat b.json 
+$ cat b.json
 {
    "x": 1,
    "y": 2

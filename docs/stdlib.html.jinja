@@ -2,13 +2,13 @@
 
 <h1>Standard Library</h1>
 
-<p> This page describes the functions available in Jsonnet's standard library, i.e. the object
+<p> This page describes the functions available in Jsonlang's standard library, i.e. the object
 implicitly bound to the <code>std</code> variable. Some of the standard library functions can be
-implemented in Jsonnet.  Their code can be found in the <tt>std.jsonnet</tt> file.  The behavior of
+implemented in Jsonlang.  Their code can be found in the <tt>std.jsonlang</tt> file.  The behavior of
 some of the other functions, i.e. the ones that expose extra functionality not otherwise available
 to programmers, is described formally in the <a href="spec.html">specification</a>.  </p>
 
-<p>The standard library is implicitly added to all Jsonnet programs by enclosing them in a local
+<p>The standard library is implicitly added to all Jsonlang programs by enclosing them in a local
 construct.  For example, if the program given by the user is <code>{x: "foo"}</code>, then the
 actual code executed would be <code>local std = { ... }; {x: "foo"}</code>.  The functions in the
 standard library are all hidden fields of the <code>std</code> object.</p>
@@ -49,20 +49,20 @@ fields are not visible via reflection.</p>
 <h3>Mathematical Utilities</h3>
 
 <p>The following mathematical functions are available:
-<code>std.abs(n)</code>, 
-<code>std.max(a, b)</code>, 
-<code>std.min(a, b)</code>, 
-<code>std.pow(x, n)</code>, 
-<code>std.exp(x)</code>, 
-<code>std.exponent(x)</code>, 
-<code>std.mantissa(x)</code>, 
-<code>std.floor(x)</code>, 
-<code>std.ceil(x)</code>, 
-<code>std.sqrt(x)</code>, 
-<code>std.sin(x)</code>, 
-<code>std.cos(x)</code>, 
-<code>std.tan(x)</code>, 
-<code>std.asin(x)</code>, 
+<code>std.abs(n)</code>,
+<code>std.max(a, b)</code>,
+<code>std.min(a, b)</code>,
+<code>std.pow(x, n)</code>,
+<code>std.exp(x)</code>,
+<code>std.exponent(x)</code>,
+<code>std.mantissa(x)</code>,
+<code>std.floor(x)</code>,
+<code>std.ceil(x)</code>,
+<code>std.sqrt(x)</code>,
+<code>std.sin(x)</code>,
+<code>std.cos(x)</code>,
+<code>std.tan(x)</code>,
+<code>std.asin(x)</code>,
 <code>std.acos(x)</code>, and
 <code>std.atan(x)</code>.</p>
 
@@ -174,7 +174,7 @@ yields: <code>{"json": "{name: \"Multiline\\nc:\\\\path\"}"}</code></p>
 <h4>std.manifestIni(v)</h4>
 
 <p>Convert the given structure to a string in <a href="http://en.wikipedia.org/wiki/INI_file">INI
-format</a>.  This allows using Jsonnet's object model to build a configuration to be consumed by an
+format</a>.  This allows using Jsonlang's object model to build a configuration to be consumed by an
 application expecting an INI file.  The data is in the form of a set of sections, each containing a
 key/value mapping.  These examples should make it clear:</p>
 
@@ -199,7 +199,7 @@ y = 22
 z = 33
 [s2]
 p = yes
-q = 
+q =
 </code>
 
 
@@ -267,13 +267,13 @@ it should initialize.</p>
 <p>This is primarily used to desugar array comprehension syntax.  It first filters, then maps thte
 given array, using the two functions provided.</p>
 
- 
+
 <h4>std.filter(func, arr)</h4>
 
 <p>Return a new array containing all the elements of <code>arr</code> for which the
 <code>func</code> function returns true.</p>
 
- 
+
 <h4>std.foldl(func, arr, init)</h4>
 
 <p>Classic foldl function.  Calls the function on each array element and the result of the previous

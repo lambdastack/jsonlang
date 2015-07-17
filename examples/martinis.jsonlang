@@ -14,10 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// example_operators.jsonnet
+// martinis.jsonlang
 {
-    foo: [1, 2, 3],
-    bar: [x * x for x in self.foo if x >= 2],
-    baz: { ["field" + x]: x for x in self.foo },
-    obj: { ["foo" + "bar"]: 3 },
+    "Vodka Martini": {
+        ingredients: [
+            { kind: "Vodka", qty: 2 },
+            { kind: "Dry White Vermouth", qty: 1 },
+        ],
+        garnish: "Olive",
+        served: "Straight Up",
+    },
+    Cosmopolitan: {
+        ingredients: [
+            { kind: "Vodka", qty: 2 },
+            { kind: "Triple Sec", qty: 0.5 },
+            { kind: "Cranberry Juice", qty: 0.75 },
+            { kind: "Lime Juice", qty: 0.5 },
+        ],
+        garnish: "Orange Peel",
+        served: "Straight Up",
+    },
 }

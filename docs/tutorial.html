@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Jsonnet - The Data Templating Language</title>
+    <title>Jsonlang - The Data Templating Language</title>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
-    <meta name="keywords" content="Jsonnet, JSON, YAML, language, configuration, configuration language, functional, declarative, lazy, structured, elegant, semantics, clean, mixins, inheritance, template, expansion, expand" />
-    <meta name="description" content="The Jsonnet language allows elegant and easy description of JSON data." />
+    <meta name="keywords" content="Jsonlang, JSON, YAML, language, configuration, configuration language, functional, declarative, lazy, structured, elegant, semantics, clean, mixins, inheritance, template, expansion, expand" />
+    <meta name="description" content="The Jsonlang language allows elegant and easy description of JSON data." />
 
     <link rel="icon" type="image/png" href="favicon.png" />
 
@@ -16,21 +16,14 @@
     </script>
 
     <script type="text/javascript">
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-53570216-1', 'auto');
-      ga('send', 'pageview');
-
+    /*add google analytics*/
     </script>
 
     <script src="prism.js" type="text/javascript">
     </script>
 
     <script type="text/javascript">
-    Prism.languages.jsonnet = {
+    Prism.languages.jsonlang = {
       'cppcomment': /\/\/.*/g,
       'comment': /\/\*[\w\W]*?\*\//g,
       'string': /("|')(\\?.)*?\1/g,
@@ -124,22 +117,22 @@
             }
         }
 
-        document.onclick = menu_close_all(); 
+        document.onclick = menu_close_all();
 
     </script>
 
 </head>
 
-<body class="language-jsonnet">
+<body class="language-jsonlang">
 
 <div class="header">
 
 <div class="tagline"><i>The data templating language</i></div>
 <div id="githubmarkbox">
-<a href="https://groups.google.com/forum/#!forum/jsonnet"><div id="groupsmark"></div></a>
-<a href="http://github.com/google/jsonnet"><div id="githubmark"></div></a>
+<a href="https://groups.google.com/forum/#!forum/jsonlang"><div id="groupsmark"></div></a>
+<a href="http://github.com/google/jsonlang"><div id="githubmark"></div></a>
 </div>
-<div class="title"><a href="index.html" class="title">Jsonnet</a></div>
+<div class="title"><a href="index.html" class="title">Jsonlang</a></div>
 
 <ol id="menubar">
 
@@ -191,12 +184,12 @@
 
 <h1>Tutorial</h1>
 
-<p> This page is a guided tour through the Jsonnet language, from its most basic features to its
+<p> This page is a guided tour through the Jsonlang language, from its most basic features to its
 powerful object model, punctuated with examples drawn from the world of cocktails.  These examples
 are meant to be fun, and although a little contrived, do not restrict our thinking to any one
-particular application of Jsonnet.</p>
+particular application of Jsonlang.</p>
 
-<p>Caveat: Note that Jsonnet unparses JSON in a simple way.  In particular, it alphabetically
+<p>Caveat: Note that Jsonlang unparses JSON in a simple way.  In particular, it alphabetically
 reorders object fields in its output.  This is natural and compatible with JSON, since if order is
 meaningful, an array of pairs should be used instead of an object.  Also, unparsing JSON using a
 canonical ordering of field names makes it possible to use diff to compare outputs.  However, the
@@ -207,23 +200,30 @@ equivalent).</p>
 
 <h2>Simple Syntax Improvements</h2>
 
-<p> In Jsonnet, unlike JSON, sufficiently simple object fields (the strings to the left of the
+<p> In Jsonlang, unlike JSON, sufficiently simple object fields (the strings to the left of the
 colon) do not need quotes if their names are valid identifiers (i.e. match the regular expression
 [a-zA-Z_][a-zA-Z0-9_]*).  In JSON, commas are not allowed at the end of arrays / objects, which can
-make writing JSON painful if you need to reorder an array or delete the last element.  In Jsonnet,
-extra commas are allowed but not required.  Jsonnet also allows both C and C++ style comments.</p>
+make writing JSON painful if you need to reorder an array or delete the last element.  In Jsonlang,
+extra commas are allowed but not required.  Jsonlang also allows both C and C++ style comments.</p>
 
 <table>
 <tr>
-<td><span class="TableHeader">Input (Jsonnet)</span></td>
+<td><span class="TableHeader">Input (Jsonlang)</span></td>
 <td><span class="TableHeader">Output (JSON)</span></td>
 </tr>
 <tr>
 <td>
-<pre><code>/* bar_menu.1.jsonnet */
+<pre><code>/* bar_menu.1.jsonlang */
 {
+    local installed = false,
     cocktails: {
         // Ingredient quantities are in fluid ounces.
+        pip: {
+            package: &#34;rally&#34;,
+            state: if installed then &#34;present&#34; else &#34;absent&#34;,
+            mode: &#34;{{mode}}&#34;,
+            sudo: &#34;true&#34;,
+        },
         &#34;Tom Collins&#34;: {
             ingredients: [
                 { kind: &#34;Farmers Gin&#34;, qty: 1.5 },
@@ -245,7 +245,7 @@ extra commas are allowed but not required.  Jsonnet also allows both C and C++ s
             served: &#34;Straight Up&#34;,
         },
     }
-} 
+}
 </code></pre>
 </td>
 <td>
@@ -302,10 +302,10 @@ like if the dot operator was not taken advantage of.</p>
 object).</p>
 
 <table>
-<tr> <td><span class="TableHeader">Input (Jsonnet)</span></td> </tr>
+<tr> <td><span class="TableHeader">Input (Jsonlang)</span></td> </tr>
 <tr>
 <td>
-<pre><code>// bar_menu.2.jsonnet
+<pre><code>// bar_menu.2.jsonlang
 {
     cocktails: {
         &#34;Tom Collins&#34;: {
@@ -315,15 +315,15 @@ object).</p>
                 { kind: &#34;Simple Syrup&#34;, qty: 0.5 },
                 { kind: &#34;Soda&#34;, qty: 2 },
                 { kind: &#34;Angostura&#34;, qty: &#34;dash&#34; },
-            ],  
+            ],
             garnish: &#34;Maraschino Cherry&#34;,
             served: &#34;Tall&#34;,
-        },  
+        },
         Martini: {
             ingredients: [
                 {
                     // Evaluate a path to get the first ingredient of the Tom Collins.
-                    kind: $.cocktails[&#34;Tom Collins&#34;].ingredients[0].kind, 
+                    kind: $.cocktails[&#34;Tom Collins&#34;].ingredients[0].kind,
                     // or $[&#34;cocktails&#34;][&#34;Tom Collins&#34;][&#34;ingredients&#34;][0][&#34;kind&#34;],
                     qty: 1
                 },
@@ -333,9 +333,8 @@ object).</p>
             served: &#34;Straight Up&#34;,
         },
         &#34;Gin Martini&#34;: self.Martini,
-    }   
-}   
-
+    }
+}
 </code></pre>
 </td>
 </tr>
@@ -382,14 +381,14 @@ object).</p>
 
 <h3>Arithmetic and Conditionals</h3>
 
-<p>Jsonnet has constructs for manipulating data.  There are the usual arithmetic operators on
+<p>Jsonlang has constructs for manipulating data.  There are the usual arithmetic operators on
 numbers (double precision floating point), booleans, and strings.  The + operator acts on arrays and
 strings to concatenate them.  It also acts on objects by fusing the two objects, i.e. yielding a new
 object with all of the fields and values from both.  In the event that the two objects both define
 the same field, then the resulting object will use the value from the object that was on the right
 hand side of the +. </p>
 
-<p>There is an <code>if</code> construct for conditional code.  Since Jsonnet is an
+<p>There is an <code>if</code> construct for conditional code.  Since Jsonlang is an
 expression language, the conditional behaves more like the ternary "?:" operator in C, or the "a if
 b else c" syntax of Python, in that it can be embedded in the middle of an expression.</p>
 
@@ -399,14 +398,14 @@ not Javascript).</p>
 
 <table>
 <tr>
-<td><span class="TableHeader">Input (Jsonnet)</span></td>
+<td><span class="TableHeader">Input (Jsonlang)</span></td>
 <td><span class="TableHeader">Output (JSON)</span></td>
 </tr>
 <tr>
 <td>
-<pre><code>// bar_menu.3.jsonnet
+<pre><code>// bar_menu.3.jsonlang
 {
-    foo: 3,     
+    foo: 3,
     bar: 2 * self.foo,  // Multiplication.
     baz: &#34;The value &#34; + self.bar + &#34; is &#34;
          + (if self.bar &gt; 5 then &#34;large&#34; else &#34;small&#34;) + &#34;.&#34;,
@@ -442,12 +441,12 @@ example.</p>
 
 <table>
 <tr>
-<td><span class="TableHeader">Input (Jsonnet)</span></td>
+<td><span class="TableHeader">Input (Jsonlang)</span></td>
 <td><span class="TableHeader">Output (JSON)</span></td>
 </tr>
 <tr>
 <td>
-<pre><code>// example_operators.jsonnet
+<pre><code>// example_operators.jsonlang
 {
     foo: [1, 2, 3],
     bar: [x * x for x in self.foo if x &gt;= 2],
@@ -484,19 +483,19 @@ together to produce a single record for the "cocktails" field. </p>
 
 <table>
 <tr>
-<td><span class="TableHeader">Input (Jsonnet)</span></td>
+<td><span class="TableHeader">Input (Jsonlang)</span></td>
 <td><span class="TableHeader">Output (JSON)</span></td>
 </tr>
 <tr>
 <td>
-<pre><code>// bar_menu.5.jsonnet
+<pre><code>// bar_menu.5.jsonlang
 {
     cocktails: {
         &#34;Bee&#39;s Knees&#34;: {
             // Construct the ingredients by using 4/3 oz
-            // of each element in the given list. 
-            ingredients: [  // Array comprehension. 
-                { kind: i, qty: 4/3 } 
+            // of each element in the given list.
+            ingredients: [  // Array comprehension.
+                { kind: i, qty: 4/3 }
                 for i in [&#34;Honey Syrup&#34;, &#34;Lemon Juice&#34;, &#34;Farmers Gin&#34;]
             ],
             garnish: &#34;Lemon Twist&#34;,
@@ -565,24 +564,24 @@ together to produce a single record for the "cocktails" field. </p>
 
 <h2>Modularity and Encapsulation</h2>
 
-<p>As the amount of JSON grows, its size makes it harder to manage.  Jsonnet has various constructs
-to help.  A file can be broken into parts, as one Jsonnet file can import other Jsonnet files (and
+<p>As the amount of JSON grows, its size makes it harder to manage.  Jsonlang has various constructs
+to help.  A file can be broken into parts, as one Jsonlang file can import other Jsonlang files (and
 therefore other JSON files).  Values can be held in local variables and fields, which are only
 visible within their scopes.  Functions can be defined to factor out common descriptions, and error
-statements can be used to validate inputs.  Jsonnet provides a standard library that is implicitly
+statements can be used to validate inputs.  Jsonlang provides a standard library that is implicitly
 imported and contains useful functions for data manipulation, among other things.</p>
 
 <h3>Imports</h3>
 
 <p>The first example below factors out some cocktails into a separate file.  This may be useful to
 allow concurrent modifications by different mixologists.  The <code>import</code> construct yields
-the content of the <tt>martinis.jsonnet</tt> file.  The <code>+</code> operator is object
+the content of the <tt>martinis.jsonlang</tt> file.  The <code>+</code> operator is object
 concatenation, which combines two objects to form a single object.  Note that the Cosmopolitan field
 is defined in both files, so the one on the right hand side is used.  This means that
-<tt>bar_menu.jsonnet</tt> has overridden the recipe from <tt>martinis.jsonnet</tt> with a different
+<tt>bar_menu.jsonlang</tt> has overridden the recipe from <tt>martinis.jsonlang</tt> with a different
 recipe (one that uses Cointreau instead of Triple Sec, among other changes).</p>
 
-<pre><code>// martinis.jsonnet
+<pre><code>// martinis.jsonlang
 {
     &#34;Vodka Martini&#34;: {
         ingredients: [
@@ -605,9 +604,9 @@ recipe (one that uses Cointreau instead of Triple Sec, among other changes).</p>
 }
 </code></pre>
 
-<pre><code>// bar_menu.6.jsonnet
+<pre><code>// bar_menu.6.jsonlang
 {
-    cocktails: import &#34;martinis.jsonnet&#34; + {
+    cocktails: import &#34;martinis.jsonlang&#34; + {
         Manhattan: {
             ingredients: [
                 { kind: &#34;Rye&#34;, qty: 2.5 },
@@ -642,7 +641,7 @@ the quantity, thus avoiding the exposure of implementation details.</p>
 <p>There is also an identity function defined.  This is there to demonstrate that function
 definitions are really just syntax sugar for closures that are assigned to a field.</p>
 
-<pre><code>// bar_menu_utils.jsonnet
+<pre><code>// bar_menu_utils.jsonlang
 {
     equal_parts(size, ingredients)::
         if std.length(ingredients) == 0 then
@@ -657,19 +656,19 @@ definitions are really just syntax sugar for closures that are assigned to a fie
 
 <p>Finally, you may have noticed that two colons are used instead of one.  This marks the field as
 being <dfn>hidden</dfn>, i.e. it will not appear in the JSON output.  The field can still be
-accessed by Jsonnet code, so it is not like the private/protected modifier that some languages have.
+accessed by Jsonlang code, so it is not like the private/protected modifier that some languages have.
 Hidden fields are convenient for functions, which cannot be manifestated in the JSON output.  It has
 other uses too, as we will see in the later section on object orientation.</p>
 
 <h3>Local Variables</h3>
 
-<p>Like most languages, Jsonnet has <dfn>variables</dfn>, which can be used to factor out
+<p>Like most languages, Jsonlang has <dfn>variables</dfn>, which can be used to factor out
 expressions.  They are referenced using standard static <a
 href="http://en.wikipedia.org/wiki/Scope_(computer_science)">scoping</a> rules.  In the following
 case, the imported object is stored in the variable, which is later referenced to access the
 <code>equal_parts</code> function.  It is also possible to store the import in a field of the root
 object, and access it with <code>$</code>.  In that case, it should be a hidden field (using the ::
-syntax) in order to avoid appearing in the output of <code>bar_menu.7.jsonnet</code>.</p>
+syntax) in order to avoid appearing in the output of <code>bar_menu.7.jsonlang</code>.</p>
 
 <table>
 <tr>
@@ -678,8 +677,8 @@ syntax) in order to avoid appearing in the output of <code>bar_menu.7.jsonnet</c
 </tr>
 <tr>
 <td>
-<pre><code>// bar_menu.7.jsonnet
-local utils = import &#34;bar_menu_utils.jsonnet&#34;;
+<pre><code>// bar_menu.7.jsonlang
+local utils = import &#34;bar_menu_utils.jsonlang&#34;;
 {
     local my_gin = &#34;Farmers Gin&#34;,
     cocktails: {
@@ -698,9 +697,8 @@ local utils = import &#34;bar_menu_utils.jsonnet&#34;;
             garnish: &#34;Orange Peel&#34;,
             served: &#34;On The Rocks&#34;,
         },
-    }   
-}           
-
+    }
+}
 </code></pre>
 </td>
 <td>
@@ -758,7 +756,7 @@ to a stashing <code>self</code> in a variable at the outermost object.</p>
 </tr>
 <tr>
 <td>
-<pre><code>// bar_menu.8.jsonnet
+<pre><code>// bar_menu.8.jsonlang
 {
     cocktails: {
         Negroni: {
@@ -774,7 +772,7 @@ to a stashing <code>self</code> in a variable at the outermost object.</p>
             served: &#34;On The Rocks&#34;,
         },
     }
-}           
+}
 </code></pre>
 </td>
 <td>
@@ -799,7 +797,7 @@ to a stashing <code>self</code> in a variable at the outermost object.</p>
 
 <h3>Stack Traces</h3>
 
-<p> Jsonnet provides stack traces when an error is raised.  Here is an example, where we provide an
+<p> Jsonlang provides stack traces when an error is raised.  Here is an example, where we provide an
 empty list of ingredients to the <code>equal_parts</code> function.  </p>
 
 <table>
@@ -809,15 +807,15 @@ empty list of ingredients to the <code>equal_parts</code> function.  </p>
 </tr>
 <tr>
 <td>
-<pre><code>// no_ingredients.jsonnet
-local utils = import &#34;bar_menu_utils.jsonnet&#34;;
+<pre><code>// no_ingredients.jsonlang
+local utils = import &#34;bar_menu_utils.jsonlang&#34;;
 utils.equal_parts(4, [])
 </code></pre>
 </td>
 <td>
 <pre>RUNTIME ERROR: No ingredients specified.
-	bar_menu_utils.jsonnet:5:13-45	function &lt;anonymous&gt;
-	no_ingredients.jsonnet:3:1-24	
+	bar_menu_utils.jsonlang:5:13-45	function &lt;anonymous&gt;
+	no_ingredients.jsonlang:3:1-24
 </pre>
 </td>
 </tr>
@@ -825,7 +823,7 @@ utils.equal_parts(4, [])
 
 <h2>Object-Orientation</h2>
 
-<p>Finally, we see how Jsonnet provides the abstraction mechanisms of object oriented programming,
+<p>Finally, we see how Jsonlang provides the abstraction mechanisms of object oriented programming,
 to allow the writing of base templates that can be extended for a variety of purposes.</p>
 
 <p>The object concatenation operator <code>+</code> can be used to override fields from one object
@@ -845,7 +843,7 @@ the <code>super.ingredients + </code> would result in a cocktail containing only
 </tr>
 <tr>
 <td>
-<pre><code>// bar_menu.9.jsonnet
+<pre><code>// bar_menu.9.jsonlang
 {
     cocktails: {
         &#34;Whiskey Sour&#34;: {
@@ -863,11 +861,6 @@ the <code>super.ingredients + </code> would result in a cocktail containing only
         },
     }
 }
-
-
-
-
-
 </code></pre>
 </td>
 <td>
@@ -900,7 +893,7 @@ the <code>super.ingredients + </code> would result in a cocktail containing only
 </table>
 
 
-<p>The key to making Jsonnet object-oriented is that the <code>self</code> keyword be "late bound".
+<p>The key to making Jsonlang object-oriented is that the <code>self</code> keyword be "late bound".
 This is illustrated in the next example, where an alternative menu is derived from the above.  It
 takes the original menu, and replaces the cocktails object with a new object that is in turn based
 on the original menu's cocktail object.  But this new cocktail object overrides the Whiskey sour,
@@ -927,8 +920,8 @@ addition, so it could also have been used in the previous example to add the egg
 </tr>
 <tr>
 <td>
-<pre><code>// bar_menu.10.jsonnet
-import &#34;bar_menu.9.jsonnet&#34; {
+<pre><code>// bar_menu.10.jsonlang
+import &#34;bar_menu.9.jsonlang&#34; {
     cocktails +: {
         &#34;Whiskey Sour&#34;: {
             ingredients: [
@@ -940,14 +933,6 @@ import &#34;bar_menu.9.jsonnet&#34; {
         }
     }
 }
-
-
-
-
-
-
-
-
 </code></pre>
 </td>
 <td>
@@ -995,7 +980,7 @@ overrides the hidden status from <code>Base</code> to make the field visible in 
 </tr>
 <tr>
 <td>
-<pre><code>// hidden_fields.jsonnet
+<pre><code>// hidden_fields.jsonlang
 {
     local Base = { w: 1, x: 2, y:: 3, z:: 4 },
     foo: Base { w: super.w, x:: super.x, y: super.y, z::: super.z},
@@ -1013,7 +998,7 @@ overrides the hidden status from <code>Base</code> to make the field visible in 
 
 <h2>Computed and Optional Fields</h2>
 
-<p>In order to support objects whose keys are unknown until run-time, Jsonnet has a syntax allowing
+<p>In order to support objects whose keys are unknown until run-time, Jsonlang has a syntax allowing
 the field name to be computed, or omitted entirely.  The syntax is similar to object comprehension,
 which is also a kind of computed field.</p>
 
@@ -1024,7 +1009,7 @@ which is also a kind of computed field.</p>
 </tr>
 <tr>
 <td>
-<pre><code>// bar_menu.11.jsonnet
+<pre><code>// bar_menu.11.jsonlang
 {
     local name = &#34;Gin Fizz&#34;,
     local brunch = true,
@@ -1054,11 +1039,6 @@ which is also a kind of computed field.</p>
         },
     }
 }
-
-
-
-
-
 </code></pre>
 </td>
 <td>
