@@ -182,114 +182,79 @@
 
 </div>
 
-<p>Jsonlang is a domain specific configuration language that helps you define <a
-href="http://www.json.org">JSON</a> data.  Jsonlang lets you compute fragments of JSON within the
-structure, bringing the same benefit to structured data that templating languages bring to plain
-text.  The example below illustrates a few
-features -- referring to another part of the structure, overriding object fields, and string
-operations.</p>
+<h1>Libraries For Other Languages</h1>
 
-<table class="landing-page-example" cellspacing="0">
-<tr>
-<td>
-<pre class="large"><code>// Jsonnet Example
+<p> If you don't want to invoke the jsonlang commandline utility to evaluate Jsonlang, there are also
+libraries for Python and C.  In future we would like to support more languages by wrapping the C
+API in each case.</p>
+
+<h2>C API</h2>
+
+<p>The C API simply wraps the C++ implementation to hide C++ language features like templates,
+classes, overloading, etc.  This makes it easier to bind to other languages, as C is typically the
+lowest common denominator across all systems.</p>
+
+<p>The API is documented in <a
+href="http://github.com/google/jsonlang/blob/master/libjsonlang.h">libjsonlang.h</a>.  It is built with
+'make libjsonlang.so'.  It is used by the python bindings, the Jsonlang commandline tool, as well as a
+couple of simpler tests.  Search for #include "libjsonlang.h".  </p>
+
+<p>To use the API, create a JsonlangVM object, set various options, then tell it to evaluate a
+filename or snippet.  To avoid leaking memory, the result of execution (JSON or error message) and
+the JsonlangVM object itself must be cleaned up using the corresponding functions.</p>
+
+<h2>Python API</h2>
+
+<p>The Python API wraps the C API in a straightforward way.  It can be installed with <tt>pip
+install jsonlang</tt> or built directly with <tt>setup.py</tt>.</p>
+
+<p>The Python module provides two functions, <tt>evaluate_file(f)</tt> and <tt>evaluate_snippet(f,
+e)</tt>.  In the latter case, the parameter <tt>f</tt> is used in stack traces due to errors raised
+in the snippet.</p>
+
+<p>Keyword arguments to these functions are used to control the virtual machine.  They are
+<tt>gc_min_objects</tt>, <tt>gc_growth_trigger</tt>, <tt>ext_vars</tt>, <tt>debug_ast</tt>, and
+<tt>max_trace</tt>.  The <tt>debug_ast</tt> argument is a boolean, and <tt>ext_vars</tt> is a dict
+mapping strings to strings.  The other keyword arguments should be numbers.</p>
+
+<p>If an error is raised during the evaluation of the Jsonlang code, it is formed into a stack trace
+and thrown as a python RuntimeError.  Otherwise, the JSON string is returned.  To convert this
+into objects for easy interpretation in Python, use the <a
+href="https://docs.python.org/2/library/json.html">json</a> module.  An example:</p>
+
+<pre>
+import json
+import _jsonlang
+
+jsonlang_str = '''
 {
     person1: {
-        name: &#34;Alice&#34;,
-        welcome: &#34;Hello &#34; + self.name + &#34;!&#34;,
+        name: "Alice",
+        welcome: "Hello " + self.name + "!",
     },
-    person2: self.person1 { name: &#34;Bob&#34; },
+    person2: self.person1 { name: std.extVar("OTHER_NAME") },
 }
-</code></pre>
-</td>
-<td>
-<span class="bigarrow">➡</span>
-</td>
-<td>
-<pre class="large"><code>{
-   &#34;person1&#34;: {
-      &#34;name&#34;: &#34;Alice&#34;,
-      &#34;welcome&#34;: &#34;Hello Alice!&#34;
-   },
-   &#34;person2&#34;: {
-      &#34;name&#34;: &#34;Bob&#34;,
-      &#34;welcome&#34;: &#34;Hello Bob!&#34;
-   }
-}
-</code></pre>
-</td>
-</tr>
-</table>
+'''
 
-<p>Use Jsonlang to organize your JSON data, or to help your users organize the data they send to you.
-It is easy to integrate Jsonlang's library or commandline interpreter into existing systems that take
-JSON or <a href="http://www.yaml.org">YAML</a>.  Some example situations are application
-configuration (files in etc), build systems, package definitions, configuration management systems,
-and cloud deployment agents.</p>
-
-<h2>Variants</h2>
-
-<p>Jsonlang is ideal when you need to derive new data from existing data with subtle changes.
-This was hinted at in the above example.  A more comprehensive illustration is the simple build
-configuration below.  An object <code>CCompiler</code> is defined, which is then specialized for GCC
-and Clang.  These are used to help construct an array of build targets.</p>
-
-<p>Note the example <a href="http://www.bracha.org/oopsla90.pdf">mixins</a> <code>Opt</code> and
-<code>Dbg</code> that can be applied to add optimization flags.  Mixins are the ultimate form of
-inheritance, as they can be combined arbitrarily via the <code>+</code> operator.  In simple cases,
-they behave identically to conventional object-oriented languages like Java.</p>
-
-<table class="landing-page-example" cellspacing="0">
-<tr>
-<td>
-<pre class="large"><code>// Compiler template
-local CCompiler = {
-    cFlags: [],
-    out: &#34;a.out&#34;,
-    local flags_str = std.join(&#34; &#34;, self.cFlags),
-    local files_str = std.join(&#34; &#34;, self.files),
-    cmd: &#34;%s %s %s -o %s&#34; % [self.compiler, flags_str, files_str, self.out],
-};
-
-// GCC specialization
-local Gcc = CCompiler { compiler: &#34;gcc&#34; };
-
-// Another specialization
-local Clang = CCompiler { compiler: &#34;clang&#34; };
-
-// Mixins - append flags
-local Opt = { cFlags: super.cFlags + [&#34;-O3&#34;, &#34;-DNDEBUG&#34;] };
-local Dbg = { cFlags: super.cFlags + [&#34;-g&#34;] };
-
-// Output:
-{
-    targets: [
-        Gcc { files: [&#34;a.c&#34;, &#34;b.c&#34;] },
-        Clang { files: [&#34;test.c&#34;], out: &#34;test&#34; },
-        Clang + Opt { files: [&#34;test2.c&#34;], out: &#34;test2&#34; },
-        Gcc + Opt + Dbg { files: [&#34;foo.c&#34;, &#34;bar.c&#34;], out: &#34;baz&#34; },
-    ]
-}
-</code></pre>
-<p class="try_it_out">Try it out <a href="demo.html">here
-</a></p>
-</td>
-</tr>
-</table>
+json_str = _jsonlang.evaluate_snippet("snippet", jsonlang_str, ext_vars={'OTHER_NAME': 'Bob'})
+json_obj = json.loads(json_str)
+for person_id, person in json_obj.iteritems():
+    print('%s is %s, greeted by "%s"' % (person_id, person['name'], person['welcome']))
+</pre>
 
 
-<h2>Provenance, Copyright, License</h2>
+<h2>Unofficial Third Party APIs</h2>
 
-<p>Jsonlang is based on Jsonnet, a Google 20% project. Jsonlang has been open-sourced under the <a
-href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a> license. A large portion of the
-current code was developed by David Cunningham - dcunnin@google.com under the Jsonnet project at Google.</p>
+<p>There are unofficial bindings available for other languages.  These are not supported by Google
+and may be some versions behind the latest release.</p>
 
-<h3>News</h3>
-
-<p><b>July 17, 2015</b> JsonLang name changed and new functionality added!</p>
-
-<p><b>July 10, 2015</b> Jsonnet was cloned and modifications added for the <a
-href="http://github.com/iqstack">IQStack project</a>!</p>
+<ul>
+<li><b>Go</b>: <a href="https://github.com/strickyak/jsonlang_cgo">https://github.com/strickyak/jsonlang_cgo</a></li>
+<li><b>LuaJIT (FFI)</b>: <a href="https://github.com/yuduanchen/luajit-jsonlang">https://github.com/yuduanchen/luajit-jsonlang</a></li>
+<li><b>Node.js</b>: <a href="https://github.com/yosuke-furukawa/node-jsonlang">https://github.com/yosuke-furukawa/node-jsonlang</a></li>
+<li><b>PHP</b>: <a href="https://github.com/Neeke/Jsonlang-PHP">https://github.com/Neeke/Jsonlang-PHP</a></li>
+<li><b>Python3 &amp; Visual Studio build files</b>: <a href="https://github.com/tyler-elric/jsonlang">https://github.com/tyler-elric/jsonlang</a></li>
+</ul>
 
 <div style="margin-bottom: 50px"></div>
 <hr />

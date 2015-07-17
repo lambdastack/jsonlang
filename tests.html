@@ -182,114 +182,32 @@
 
 </div>
 
-<p>Jsonlang is a domain specific configuration language that helps you define <a
-href="http://www.json.org">JSON</a> data.  Jsonlang lets you compute fragments of JSON within the
-structure, bringing the same benefit to structured data that templating languages bring to plain
-text.  The example below illustrates a few
-features -- referring to another part of the structure, overriding object fields, and string
-operations.</p>
+<h1>Tests</h1>
 
-<table class="landing-page-example" cellspacing="0">
-<tr>
-<td>
-<pre class="large"><code>// Jsonnet Example
-{
-    person1: {
-        name: &#34;Alice&#34;,
-        welcome: &#34;Hello &#34; + self.name + &#34;!&#34;,
-    },
-    person2: self.person1 { name: &#34;Bob&#34; },
-}
-</code></pre>
-</td>
-<td>
-<span class="bigarrow">➡</span>
-</td>
-<td>
-<pre class="large"><code>{
-   &#34;person1&#34;: {
-      &#34;name&#34;: &#34;Alice&#34;,
-      &#34;welcome&#34;: &#34;Hello Alice!&#34;
-   },
-   &#34;person2&#34;: {
-      &#34;name&#34;: &#34;Bob&#34;,
-      &#34;welcome&#34;: &#34;Hello Bob!&#34;
-   }
-}
-</code></pre>
-</td>
-</tr>
-</table>
+<p>Jsonlang comes with over 600 tests (and growing) that exercise various corner cases of the
+language.  These should be very useful for anyone porting Jsonlang to e.g. Java.</p>
 
-<p>Use Jsonlang to organize your JSON data, or to help your users organize the data they send to you.
-It is easy to integrate Jsonlang's library or commandline interpreter into existing systems that take
-JSON or <a href="http://www.yaml.org">YAML</a>.  Some example situations are application
-configuration (files in etc), build systems, package definitions, configuration management systems,
-and cloud deployment agents.</p>
+<p>The full corpus of tests can be invoked via 'make test'.</p>
 
-<h2>Variants</h2>
+<p><b>Unit tests:</b> In the test_suite directory are a large number of unit tests that each
+exercise the interaction of a few features of the Jsonlang language.  If adding a standard library
+function, a test should be added here.  Also any fixed bugs should have a test added so that other
+implementations of Jsonlang can avoid the same mistake.</p>
 
-<p>Jsonlang is ideal when you need to derive new data from existing data with subtle changes.
-This was hinted at in the above example.  A more comprehensive illustration is the simple build
-configuration below.  An object <code>CCompiler</code> is defined, which is then specialized for GCC
-and Clang.  These are used to help construct an array of build targets.</p>
+<p><b>Website examples:</b>  All the examples on the website are tested the ensure that the output
+advertised in the website page is actually correct.  The code is found in the examples
+directory.</p>
 
-<p>Note the example <a href="http://www.bracha.org/oopsla90.pdf">mixins</a> <code>Opt</code> and
-<code>Dbg</code> that can be applied to add optimization flags.  Mixins are the ultimate form of
-inheritance, as they can be combined arbitrarily via the <code>+</code> operator.  In simple cases,
-they behave identically to conventional object-oriented languages like Java.</p>
+<p><b>Bindings:</b>  There are a couple of simple tests for the C and Python APIs which are run as
+part of 'make test'.</p>
 
-<table class="landing-page-example" cellspacing="0">
-<tr>
-<td>
-<pre class="large"><code>// Compiler template
-local CCompiler = {
-    cFlags: [],
-    out: &#34;a.out&#34;,
-    local flags_str = std.join(&#34; &#34;, self.cFlags),
-    local files_str = std.join(&#34; &#34;, self.files),
-    cmd: &#34;%s %s %s -o %s&#34; % [self.compiler, flags_str, files_str, self.out],
-};
+<p><b>Benchmarks:</b>  There are a few simple benchmarks in the benchmarks directory.  These are not
+executed by 'make test' because they take a while to run.</p>
 
-// GCC specialization
-local Gcc = CCompiler { compiler: &#34;gcc&#34; };
+<h2>Continuous Integration</h2>
 
-// Another specialization
-local Clang = CCompiler { compiler: &#34;clang&#34; };
-
-// Mixins - append flags
-local Opt = { cFlags: super.cFlags + [&#34;-O3&#34;, &#34;-DNDEBUG&#34;] };
-local Dbg = { cFlags: super.cFlags + [&#34;-g&#34;] };
-
-// Output:
-{
-    targets: [
-        Gcc { files: [&#34;a.c&#34;, &#34;b.c&#34;] },
-        Clang { files: [&#34;test.c&#34;], out: &#34;test&#34; },
-        Clang + Opt { files: [&#34;test2.c&#34;], out: &#34;test2&#34; },
-        Gcc + Opt + Dbg { files: [&#34;foo.c&#34;, &#34;bar.c&#34;], out: &#34;baz&#34; },
-    ]
-}
-</code></pre>
-<p class="try_it_out">Try it out <a href="demo.html">here
-</a></p>
-</td>
-</tr>
-</table>
-
-
-<h2>Provenance, Copyright, License</h2>
-
-<p>Jsonlang is based on Jsonnet, a Google 20% project. Jsonlang has been open-sourced under the <a
-href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a> license. A large portion of the
-current code was developed by David Cunningham - dcunnin@google.com under the Jsonnet project at Google.</p>
-
-<h3>News</h3>
-
-<p><b>July 17, 2015</b> JsonLang name changed and new functionality added!</p>
-
-<p><b>July 10, 2015</b> Jsonnet was cloned and modifications added for the <a
-href="http://github.com/iqstack">IQStack project</a>!</p>
+<p>To avoid embarrassment, always run 'make test' on your dev machine before submitting a pull
+request. :)</p>
 
 <div style="margin-bottom: 50px"></div>
 <hr />

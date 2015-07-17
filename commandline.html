@@ -182,114 +182,117 @@
 
 </div>
 
-<p>Jsonlang is a domain specific configuration language that helps you define <a
-href="http://www.json.org">JSON</a> data.  Jsonlang lets you compute fragments of JSON within the
-structure, bringing the same benefit to structured data that templating languages bring to plain
-text.  The example below illustrates a few
-features -- referring to another part of the structure, overriding object fields, and string
-operations.</p>
+<h1 id=cmdline_tool>Commandline Tool</h1>
 
-<table class="landing-page-example" cellspacing="0">
-<tr>
-<td>
-<pre class="large"><code>// Jsonnet Example
+<p>The commandline tool "jsonlang" will evaluate Jsonlang and emit JSON on stdout.  It can evaluate
+snippets of code, or files (by filename).  It is actually a commandline wrapper around the C API, a
+convenient way to evaluate Jsonlang code from shell scripts, build tools, or languages that do not
+yet have a library binding.</p>
+
+<h2 id=building>Building</h2>
+
+<p>The commandline tool will be built by simply invoking 'make', as it is the sole default
+target.  It can be built explicitly with 'make jsonlang'.</p>
+
+<h2 id=usage>Usage</h2>
+
+<p>The tool is self-documenting:</p>
+
+<pre>
+Usage:
+Usage:
+jsonlang {&lt;option&gt;} [&lt;filename&gt;]
+where &lt;filename&gt; defaults to - (stdin)
+and &lt;option&gt; can be:
+  -h / --help             This message
+  -e / --exec             Treat filename as code (requires explicit filename)
+  -J / --jpath &lt;dir&gt;      Specify an additional library search dir
+  -V / --var &lt;var&gt;=&lt;val&gt;  Specify an 'external' var to the given value
+  -E / --env &lt;var&gt;        Bring in an environment var as an 'external' var
+  -m / --multi            Write multiple files, list files on stdout
+  -s / --max-stack &lt;n&gt;    Number of allowed stack frames
+  -t / --max-trace &lt;n&gt;    Max length of stack trace before cropping
+  --gc-min-objects &lt;n&gt;    Do not run garbage collector until this many
+  --gc-growth-trigger &lt;n&gt; Run garbage collector after this amount of object growth
+  --debug-ast             Unparse the parsed AST without executing it
+
+  --version               Print version
+Multichar options are expanded e.g. -abc becomes -a -b -c.
+The -- option suppresses option processing for subsequent arguments.
+Note that since jsonlang programs can begin with -, it is advised to
+use -- with -e if the program is unknown, e.g. jsonlang -e -- "$CODE".
+</pre>
+
+<h2>Example</h2>
+
+<p>Evaluating a file.</p>
+
+<pre>
+~/jsonlang/examples$ jsonlang landingpage.jsonlang
 {
-    person1: {
-        name: &#34;Alice&#34;,
-        welcome: &#34;Hello &#34; + self.name + &#34;!&#34;,
-    },
-    person2: self.person1 { name: &#34;Bob&#34; },
-}
-</code></pre>
-</td>
-<td>
-<span class="bigarrow">➡</span>
-</td>
-<td>
-<pre class="large"><code>{
-   &#34;person1&#34;: {
-      &#34;name&#34;: &#34;Alice&#34;,
-      &#34;welcome&#34;: &#34;Hello Alice!&#34;
+   "person1": {
+      "name": "Alice",
+      "welcome": "Hello Alice!"
    },
-   &#34;person2&#34;: {
-      &#34;name&#34;: &#34;Bob&#34;,
-      &#34;welcome&#34;: &#34;Hello Bob!&#34;
+   "person2": {
+      "name": "Bob",
+      "welcome": "Hello Bob!"
    }
 }
-</code></pre>
-</td>
-</tr>
-</table>
+</pre>
 
-<p>Use Jsonlang to organize your JSON data, or to help your users organize the data they send to you.
-It is easy to integrate Jsonlang's library or commandline interpreter into existing systems that take
-JSON or <a href="http://www.yaml.org">YAML</a>.  Some example situations are application
-configuration (files in etc), build systems, package definitions, configuration management systems,
-and cloud deployment agents.</p>
+<p>Evaluating a snippet.</p>
 
-<h2>Variants</h2>
-
-<p>Jsonlang is ideal when you need to derive new data from existing data with subtle changes.
-This was hinted at in the above example.  A more comprehensive illustration is the simple build
-configuration below.  An object <code>CCompiler</code> is defined, which is then specialized for GCC
-and Clang.  These are used to help construct an array of build targets.</p>
-
-<p>Note the example <a href="http://www.bracha.org/oopsla90.pdf">mixins</a> <code>Opt</code> and
-<code>Dbg</code> that can be applied to add optimization flags.  Mixins are the ultimate form of
-inheritance, as they can be combined arbitrarily via the <code>+</code> operator.  In simple cases,
-they behave identically to conventional object-oriented languages like Java.</p>
-
-<table class="landing-page-example" cellspacing="0">
-<tr>
-<td>
-<pre class="large"><code>// Compiler template
-local CCompiler = {
-    cFlags: [],
-    out: &#34;a.out&#34;,
-    local flags_str = std.join(&#34; &#34;, self.cFlags),
-    local files_str = std.join(&#34; &#34;, self.files),
-    cmd: &#34;%s %s %s -o %s&#34; % [self.compiler, flags_str, files_str, self.out],
-};
-
-// GCC specialization
-local Gcc = CCompiler { compiler: &#34;gcc&#34; };
-
-// Another specialization
-local Clang = CCompiler { compiler: &#34;clang&#34; };
-
-// Mixins - append flags
-local Opt = { cFlags: super.cFlags + [&#34;-O3&#34;, &#34;-DNDEBUG&#34;] };
-local Dbg = { cFlags: super.cFlags + [&#34;-g&#34;] };
-
-// Output:
+<pre>
+~/jsonlang/examples$ jsonlang -e '{ x: 1 , y: self.x + 1 } { x: 10 }'
 {
-    targets: [
-        Gcc { files: [&#34;a.c&#34;, &#34;b.c&#34;] },
-        Clang { files: [&#34;test.c&#34;], out: &#34;test&#34; },
-        Clang + Opt { files: [&#34;test2.c&#34;], out: &#34;test2&#34; },
-        Gcc + Opt + Dbg { files: [&#34;foo.c&#34;, &#34;bar.c&#34;], out: &#34;baz&#34; },
-    ]
+   "x": 10,
+   "y": 11
+}
+</pre>
+
+<h2 id=multi>Multiple file output</h2>
+
+<p>The Jsonlang commandline tool has a special mode for generating multiple JSON files from a single
+Jsonlang file.  This can be useful if you want to avoid writing lots of small Jsonlang files, or if
+you want to take advantage of cross-references and interdependencies between the files.  The idea is
+to create a single JSON structure, the top level of which defines the various files.  The following
+example shows how to do it: </p>
+
+<pre class="large"><code>// multiple_output.jsonlang
+{
+    "a.json": {
+        x: 1,
+        y: $["b.json"].y,
+    },
+    "b.json": {
+        x: $["a.json"].x,
+        y: 2,
+    },
 }
 </code></pre>
-<p class="try_it_out">Try it out <a href="demo.html">here
-</a></p>
-</td>
-</tr>
-</table>
 
+<p>When executed using jsonlang -m, this will write the generated JSON to files a.json and b.json
+instead of to stdout.  In order to integrate nicely with build tools like make, the files are not
+touched if they already contain the content that would be written to them.  To stdout is printed the
+list of files (either written or already containing the right data).  This makes it easy to drive
+other tools that operate on the JSON files.</p>
 
-<h2>Provenance, Copyright, License</h2>
-
-<p>Jsonlang is based on Jsonnet, a Google 20% project. Jsonlang has been open-sourced under the <a
-href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0</a> license. A large portion of the
-current code was developed by David Cunningham - dcunnin@google.com under the Jsonnet project at Google.</p>
-
-<h3>News</h3>
-
-<p><b>July 17, 2015</b> JsonLang name changed and new functionality added!</p>
-
-<p><b>July 10, 2015</b> Jsonnet was cloned and modifications added for the <a
-href="http://github.com/iqstack">IQStack project</a>!</p>
+<pre>
+$ jsonlang -m multiple_output.jsonlang
+a.json
+b.json
+$ cat a.json
+{
+   "x": 1,
+   "y": 2
+}
+$ cat b.json
+{
+   "x": 1,
+   "y": 2
+}
+</pre>
 
 <div style="margin-bottom: 50px"></div>
 <hr />
