@@ -44,15 +44,6 @@ div.tagline i {
     font-size: 12pt;
 }
 
-div#groupsmark {
-    background-image: url("google_groups.png");
-    width: 32px;
-    height: 32px;
-    float:right;
-    position: relative;
-    top: 32px;
-    margin: 4px;
-}
 div#githubmark {
     background-image: url("GitHub-Mark-Light-32px.png");
     width: 32px;
@@ -82,7 +73,7 @@ ol#menubar li a {
     margin: 0;
     padding: 6px 10px;
     width: 120px;
-    background-color: #421;
+    background-color: #3fa3c3;
     color: #FFF;
     text-align: center;
     text-decoration: none;
