@@ -25,7 +25,7 @@ import subprocess
 import sys
 import tempfile
 
-import _jsonnet
+import _jsonlang
 
 from service import *
 from service_google import *
@@ -36,7 +36,7 @@ from util_google import *
 service_kinds = {
     'Google': GoogleService(),
 }
-    
+
 blueprint_schema = {
     '$schema': 'http://json-schema.org/schema#',
     'type': 'object',
@@ -72,7 +72,7 @@ def path_to_string(path):
     return ''.join(arr)
 
 def config_check(config):
-    try:        
+    try:
         jsonschema.validate(config, blueprint_schema)
     except jsonschema.ValidationError as e:
         raise ConfigError('Config error: %s in $%s' % (e.message, path_to_string(e.absolute_path)))
@@ -83,11 +83,11 @@ def config_check(config):
             environment_name = service.get('environment', 'default')
             if not config['environments'].get(environment_name):
                 raise ConfigError('Config error: No such environment %s in service %s' % (environment_name, service_name))
-            
+
 
 def config_load(filename):
     try:
-        text = _jsonnet.evaluate_file(filename, max_trace=100)
+        text = _jsonlang.evaluate_file(filename, max_trace=100)
     except RuntimeError as e:
         # Error from Jsonnet
         sys.stderr.write(e.message)
@@ -204,14 +204,14 @@ def action_blueprint(config, args):
         sys.stderr.write('Action "blueprint" accepts no arguments, but got:  %s\n' % ' '.join(args))
         sys.exit(1)
     print(jsonstr(config))
-        
+
 
 def action_schema(config, args):
     if args:
         sys.stderr.write('Action "schema" accepts no arguments, but got:  %s\n' % ' '.join(args))
         sys.exit(1)
     print(jsonstr(blueprint_schema))
-        
+
 
 def action_generate_to_editor(config, args):
     if args:
@@ -312,7 +312,7 @@ def action_image_gc(config, args):
 
     # Output packer configs
     for filename, image in packers.iteritems():
-        # TODO(dcunnin): Handle AWS 
+        # TODO(dcunnin): Handle AWS
         assert image['builders'][0]['type'] == 'googlecompute'
         project = image['builders'][0]['project_id']
         image_name = image['builders'][0]['image_name']
@@ -349,7 +349,7 @@ actions = {
 
 
 def print_usage(channel):
-    channel.write("Usage: python micromanage.py <config.jsonnet> <action> <args>\n")
+    channel.write("Usage: python micromanage.py <config.jsonlang> <action> <args>\n")
     channel.write("Available actions: %s\n" % ', '.join(actions.keys()))
 
 if len(sys.argv) < 3:

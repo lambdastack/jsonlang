@@ -2,8 +2,19 @@
   "name": "language-jsonlang",
   "version": "0.0.1",
   "description": "Syntax highlighting for JsonLang",
+  "keywords": [
+      "JsonLang",
+      "json"
+  ],
+  "license": "Apache-2.0",
   "engines": {
     "atom": "*",
     "node": "*"
+  },
+  "author": "Chris Jones <cjones@cloudm2.com> (https://github.com/iqstack)",
+  "homepage": "https://atom.io/packages/language-jsonlang",
+  "repository": "https://github.com/iqstack/jsonlang/editors/atom/language-jsonlang",
+  "dependencies": {
+      "json": ">=0.1.0"
   }
 }

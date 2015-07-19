@@ -15,7 +15,7 @@
 ALL_IMAGES = $(shell cat service.list | grep '[.]packer.json$$')
 
 default:
-	../../jsonlang -J ../lib -E USER --multi service.jsonlang > service.list
+	../../../bin/jsonlang -J ../lib -E USER --multi service.jsonlang > service.list
 	$(MAKE) all_artifacts
 	$(MAKE) terraform.done
 

@@ -14,7 +14,6 @@
     'name': 'constant.numeric.jsonlang'
     'match': '\\b[.]\\d+([Ee][+-]?\\d+)?\\b'
   },
-
   {
     'name': 'support.function.jsonlang'
     'match': '\\bstd[.](acos|asin|atan|ceil|char|codepoint|cos|exp|exponent)\\b'
@@ -31,7 +30,6 @@
     'name': 'support.function.jsonlang'
     'match': '\\bstd[.](acos|asin|atan|ceil|char|codepoint|cos|exp|exponent)\\b'
   },
-
   {
     'name': 'support.function.jsonlang'
     'match': '\\bstd[.](abs|assertEqual|escapeString(Bash|Dollars|Json|Python))\\b'
@@ -52,12 +50,10 @@
     'name': 'support.function.jsonlang'
     'match': '\\bstd[.](range|split|stringChars|substr|toString|uniq)\\b'
   },
-
   {
     'name': 'variable.language.jsonlang'
     'match': '\\b[$]\\b'
   },
-
   {
     'name': 'string.double.jsonlang'
     'begin': '"'
@@ -73,61 +69,49 @@
       },
     ]
   },
-
   {
     'name': 'comment.block.jsonlang'
     'begin': '/\\*'
     'end': '\\*/'
   },
-
   {
     'name': 'comment.line.jsonlang'
     'match': '//.*$'
   },
-
   {
     'name': 'comment.block.jsonlang'
     'match': '#.*$'
   },
-
   {
     'name': 'entity.name.function.jsonlang'
     'match': '\\b[a-zA-Z_][a-z0-9A-Z_]*\\s*(\\([^)]*\\))?\\s*+?::?:?'
   },
-
   {
     'name': 'storage.type.jsonlang'
     'match': '\\b(import|importstr)\\b'
   },
-
   {
     'name': 'keyword.other.jsonlang'
     'match': '\\b(function)\\b'
   },
-
   {
     'name': 'variable.language.jsonlang'
     'match': '\\b(self|super)\\b'
   },
-
   {
     'name': 'keyword.control.jsonlang'
     'match': '\\b(if|then|else|for|in)\\b'
   },
-
   {
     'name': 'keyword.other.jsonlang'
     'match': '\\b(local|tailstrict)\\b'
   },
-
   {
     'name': 'constant.language.jsonlang'
     'match': '\\b(true|false|null)\\b'
   },
-
   {
     'name': 'keyword.control.jsonlang'
     'match': '\\b(error)\\b'
   },
-
 ]

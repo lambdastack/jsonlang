@@ -1,0 +1,127 @@
+{
+   "builders": [
+      {
+         "account_file": "service_account_key.json",
+         "image_description": "GCP builder for appserv-v20150430-2145",
+         "image_name": "appserv-v20150430-2145",
+         "instance_name": "packer-appserv-v20150430-2145",
+         "machine_type": "n1-standard-1",
+         "name": "appserv-v20150430-2145",
+         "project_id": "XXXXXXXX",
+         "source_image": "backports-debian-7-wheezy-v20141017",
+         "ssh_username": "chrisjones",
+         "type": "googlecompute",
+         "zone": "us-central1-a"
+      }
+   ],
+   "description": "Packer GcpImage: appserv-v20150430-2145",
+   "provisioners": [
+      {
+         "environment_vars": [
+            "DEBIAN_FRONTEND=noninteractive"
+         ],
+         "execute_command": "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'",
+         "inline": [
+            "apt-get -qq -y update",
+            "apt-get -qq -y -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold install nginx python-dev vim git psmisc screen strace traceroute lsof iptraf tcpdump host dnsutils python-pip"
+         ],
+         "type": "shell"
+      },
+      {
+         "execute_command": "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'",
+         "inline": [
+            "pip install flask uwsgi httplib2 cassandra-driver blist"
+         ],
+         "type": "shell"
+      },
+      {
+         "execute_command": "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'",
+         "inline": [
+            "rm /etc/nginx/sites-enabled/default"
+         ],
+         "type": "shell"
+      },
+      {
+         "environment_vars": [
+            "PACKER_EXPLICIT_FILE_CONTENT=''server {\n    listen 80;\n    server_name localhost;\n    charset     utf-8;\n    client_max_body_size 75M;\n    location / { try_files $uri @yourapplication; }\n    location @yourapplication {\n        include uwsgi_params;\n        uwsgi_pass unix:/var/www/uwsgi.sock;\n    }\n}\n''",
+            "PACKER_EXPLICIT_FILE=/etc/nginx/conf.d/frontend_nginx.conf"
+         ],
+         "execute_command": "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'",
+         "inline": [
+            "mkdir -v -p \"$(dirname \"$PACKER_EXPLICIT_FILE\")\"",
+            "echo \"Creating file: $PACKER_EXPLICIT_FILE\"",
+            "echo -n \"$PACKER_EXPLICIT_FILE_CONTENT\" > \"$PACKER_EXPLICIT_FILE\"",
+            "chmod -v 644 \"$PACKER_EXPLICIT_FILE\"",
+            "chown -v root.root \"$PACKER_EXPLICIT_FILE\""
+         ],
+         "type": "shell"
+      },
+      {
+         "environment_vars": [
+            "PACKER_EXPLICIT_FILE_CONTENT=''[uwsgi]\nbase = /var/www\ncallable = app\nchdir = /var/www\nchmod-socket = 644\nlazy = true\nlogto = /var/log/uwsgi/uwsgi.log\nmodule = main\npythonpath = /var/www\nsocket = /var/www/uwsgi.sock\n''",
+            "PACKER_EXPLICIT_FILE=/etc/uwsgi/vassals/uwsgi.ini"
+         ],
+         "execute_command": "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'",
+         "inline": [
+            "mkdir -v -p \"$(dirname \"$PACKER_EXPLICIT_FILE\")\"",
+            "echo \"Creating file: $PACKER_EXPLICIT_FILE\"",
+            "echo -n \"$PACKER_EXPLICIT_FILE_CONTENT\" > \"$PACKER_EXPLICIT_FILE\"",
+            "chmod -v 644 \"$PACKER_EXPLICIT_FILE\"",
+            "chown -v root.root \"$PACKER_EXPLICIT_FILE\""
+         ],
+         "type": "shell"
+      },
+      {
+         "environment_vars": [
+            "PACKER_EXPLICIT_FILE_CONTENT=''@reboot root /usr/local/bin/uwsgi --master --emperor /etc/uwsgi/vassals --daemonize /var/log/uwsgi/emperor.log --pidfile /var/run/uwsgi.pid --die-on-term --uid www-data --gid www-data\n''",
+            "PACKER_EXPLICIT_FILE=/etc/cron.d/emperor"
+         ],
+         "execute_command": "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'",
+         "inline": [
+            "mkdir -v -p \"$(dirname \"$PACKER_EXPLICIT_FILE\")\"",
+            "echo \"Creating file: $PACKER_EXPLICIT_FILE\"",
+            "echo -n \"$PACKER_EXPLICIT_FILE_CONTENT\" > \"$PACKER_EXPLICIT_FILE\"",
+            "chmod -v 644 \"$PACKER_EXPLICIT_FILE\"",
+            "chown -v root.root \"$PACKER_EXPLICIT_FILE\""
+         ],
+         "type": "shell"
+      },
+      {
+         "environment_vars": [
+            "PACKER_DIR=/var/log/uwsgi"
+         ],
+         "execute_command": "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'",
+         "inline": [
+            "mkdir -pv \"$PACKER_DIR\"",
+            "chmod -v 775 \"$PACKER_DIR\"",
+            "chown -v www-data.www-data \"$PACKER_DIR\""
+         ],
+         "type": "shell"
+      },
+      {
+         "environment_vars": [
+            "PACKER_DIR=/var/www"
+         ],
+         "execute_command": "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'",
+         "inline": [
+            "mkdir -pv \"$PACKER_DIR\"",
+            "chmod -v 775 \"$PACKER_DIR\"",
+            "chown -v www-data.www-data \"$PACKER_DIR\""
+         ],
+         "type": "shell"
+      },
+      {
+         "destination": "/tmp/",
+         "source": "appserv",
+         "type": "file"
+      },
+      {
+         "execute_command": "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'",
+         "inline": [
+            "mv /tmp/appserv/* /var/www/",
+            "chown -R www-data.www-data /var/www/*"
+         ],
+         "type": "shell"
+      }
+   ]
+}

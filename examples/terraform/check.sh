@@ -19,8 +19,8 @@ SUCCESS=0
 
 for I in *.golden ; do
     TEST=$(basename "$I" .golden)
-    OUT1=$(../../jsonlang "$TEST" 2>&1)
-    OUT2=$(../../jsonlang "$I" 2>&1)
+    OUT1=$(../../bin/jsonlang "$TEST" 2>&1)
+    OUT2=$(../../bin/jsonlang "$I" 2>&1)
     if [ "$OUT1" == "$OUT2" ] ; then
         SUCCESS=$((SUCCESS + 1))
     else

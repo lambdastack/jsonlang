@@ -30,7 +30,7 @@ SHARED_LDFLAGS ?= -shared
 LIB_SRC = lexer.cpp parser.cpp static_analysis.cpp vm.cpp libjsonlang.cpp
 LIB_OBJ = $(LIB_SRC:.cpp=.o)
 
-ALL = jsonlang libjsonlang.so libjsonlang_test_snippet libjsonlang_test_file libjsonlang.js doc/libjsonlang.js $(LIB_OBJ)
+ALL = ../bin/jsonlang libjsonlang.so libjsonlang_test_snippet libjsonlang_test_file libjsonlang.js ../docs/libjsonlang.js $(LIB_OBJ)
 ALL_HEADERS = libjsonlang.h vm.h static_analysis.h parser.h lexer.h ast.h static_error.h state.h std.jsonlang.h
 
 default: jsonlang
@@ -42,9 +42,9 @@ test: jsonlang libjsonlang.so libjsonlang_test_snippet libjsonlang_test_file
 	./jsonlang -e $(TEST_SNIPPET)
 	LD_LIBRARY_PATH=. ./libjsonlang_test_snippet $(TEST_SNIPPET)
 	LD_LIBRARY_PATH=. ./libjsonlang_test_file "test_suite/object.jsonlang"
-	cd examples ; ./check.sh
-	cd examples/terraform ; ./check.sh
-	cd test_suite ; ./run_tests.sh
+	cd ../examples ; ./check.sh
+	cd ../examples/terraform ; ./check.sh
+	cd ../test_suite ; ./run_tests.sh
 
 depend:
 	makedepend -f- $(LIB_SRC) jsonlang.cpp libjsonlang_test_snippet.c libjsonlang_test_file.c > Makefile.depend
@@ -58,7 +58,8 @@ parser.cpp: std.jsonlang.h
 # Commandline executable.
 jsonlang: jsonlang.cpp $(LIB_OBJ)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $< $(LIB_SRC:.cpp=.o) -o $@
-
+	mv jsonlang ../bin
+	
 # C binding.
 libjsonlang.so: $(LIB_OBJ)
 	$(CXX) $(LDFLAGS) $(LIB_OBJ) $(SHARED_LDFLAGS) -o $@
@@ -79,7 +80,7 @@ libjsonlang_test_file: libjsonlang_test_file.c libjsonlang.so libjsonlang.h
 	$(CC) $(CFLAGS) $(LDFLAGS) $< -L. -ljsonlang -o $@
 
 # Encode standard library for embedding in C
-%.jsonlang.h: %.jsonlang
+%.jsonlang.h: ../lib/%.jsonlang
 	(($(OD) -v -Anone -t u1 $< | tr " " "\n" | grep -v "^$$" | tr "\n" "," ) && echo "0") > $@
 	echo >> $@
 

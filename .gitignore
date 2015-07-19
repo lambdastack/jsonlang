@@ -9,6 +9,7 @@ jsonlang.egg-info
 .swp
 *.o
 jsonlang
+bin/
 _jsonlang.so
 libjsonlang.so
 /libjsonlang.js

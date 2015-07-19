@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 // Import some libraries
-local packer = import "packer.jsonnet";
-local terraform = import "terraform.jsonnet";
-local cassandra = import "cassandra.jsonnet";
+local packer = import "packer.jsonlang";
+local terraform = import "terraform.jsonlang";
+local cassandra = import "cassandra.jsonlang";
 
 // Credentials file (don't commit this!)
-local credentials = import "credentials.jsonnet";
+local credentials = import "credentials.jsonlang";
 
 {
     ///////////////////////////

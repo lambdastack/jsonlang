@@ -1,7 +1,7 @@
-local libimgcmd = import "lib/libimgcmd.jsonnet";
-local libservice = import "lib/libservice.jsonnet";
-local libcassandra = import "lib/libcassandra.jsonnet";
-local libhttp = import "lib/libhttp.jsonnet";
+local libimgcmd = import "lib/libimgcmd.jsonlang";
+local libservice = import "lib/libservice.jsonlang";
+local libcassandra = import "lib/libcassandra.jsonlang";
+local libhttp = import "lib/libhttp.jsonlang";
 
 
 {
