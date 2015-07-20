@@ -54,12 +54,13 @@ parser.cpp: std.jsonlang.h
 # Object files
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
+	cp $@ python/
 
 # Commandline executable.
 jsonlang: jsonlang.cpp $(LIB_OBJ)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $< $(LIB_SRC:.cpp=.o) -o $@
 	mv jsonlang ../bin
-	
+
 # C binding.
 libjsonlang.so: $(LIB_OBJ)
 	$(CXX) $(LDFLAGS) $(LIB_OBJ) $(SHARED_LDFLAGS) -o $@

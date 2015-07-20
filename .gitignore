@@ -1,4 +1,5 @@
 gh-pages/
+.ropeproject/
 .idea/
 .iml
 jsonlang.dSYM
