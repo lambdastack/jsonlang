@@ -23,7 +23,7 @@ limitations under the License.
  */
 
 
-#define LIB_JSONLANG_VERSION "v0.7.8"
+#define LIB_JSONLANG_VERSION "v0.7.9"
 
 
 /** Return the version string of the Jsonlang interpreter.  Conforms to semantic versioning

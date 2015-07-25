@@ -37,7 +37,6 @@ limitations under the License.
  * compile-time and automatically imported into all other Jsonlang programs.
  */
 {
-
     local std = self,
 
     toString(a)::

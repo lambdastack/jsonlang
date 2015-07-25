@@ -1,4 +1,20 @@
 /*
+Copyright 2015 Cloud M2 Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+--------------
+
 Copyright 2015 Google Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -539,7 +555,6 @@ namespace {
                     return inner;
                 }
 
-
                 // Literals
                 case Token::NUMBER:
                 return alloc->make<LiteralNumber>(span(tok), strtod(tok.data.c_str(), nullptr));
@@ -556,6 +571,11 @@ namespace {
                 case Token::NULL_LIT:
                 return alloc->make<LiteralNull>(span(tok));
 
+                case Token::EXEC: {
+                    Token file = popExpect(Token::STRING);
+                    return alloc->make<Exec>(span(tok, file), file.data);
+                }
+
                 // Import
                 case Token::IMPORT: {
                     Token file = popExpect(Token::STRING);
@@ -566,7 +586,6 @@ namespace {
                     Token file = popExpect(Token::STRING);
                     return alloc->make<Importstr>(span(tok, file), file.data);
                 }
-
 
                 // Variables
                 case Token::DOLLAR:
@@ -861,6 +880,8 @@ AST *jsonlang_parse(Allocator *alloc, const std::string &file, const char *input
     return wrapped;
 }
 
+//case '\'': ss << "\\\'"; break;
+
 std::string jsonlang_unparse_escape(const std::string &str)
 {
     std::stringstream ss;
@@ -960,6 +981,9 @@ static std::string unparse(const AST *ast_)
             prefix = ", ";
         }
         ss << ") " << unparse(ast->body);
+
+    } else if (auto *ast = dynamic_cast<const Exec*>(ast_)) {
+        ss << "exec " << jsonlang_unparse_escape(ast->file);
 
     } else if (auto *ast = dynamic_cast<const Import*>(ast_)) {
         ss << "import " << jsonlang_unparse_escape(ast->file);

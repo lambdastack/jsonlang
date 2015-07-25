@@ -1,4 +1,20 @@
 /*
+Copyright 2015 Cloud M2 Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+--------------
+
 Copyright 2015 Google Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +37,9 @@ limitations under the License.
 
 #include <set>
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
 
 #include "parser.h"
 #include "state.h"
@@ -634,6 +653,61 @@ namespace {
             return r;
         }
 
+        /** Exec an executable or script that produces a Jsonlang or Json file.
+         *
+         * If the file has already been imported (net result of exec), then use that version.  This maintains
+         * referential transparency in the case of writes to disk during execution. Could have added logic to import
+         * funtion instead but did it exec so as to make it clear and also add additional value at some point.
+         *
+         * \param loc Location of the exec statement.
+         * \param file Path to the filename.
+         */
+        AST *exec(const LocationRange &loc, const std::string &file)
+        {
+            // If the file name contains .jsonlang then it is assumed to be a jsonlang file so issue and import.
+            if (file.find(".jsonlang") != std::string::npos)
+                return import(loc, file);
+
+            // May need to add to libjsonlang so as to be supported in other languages.
+            // Could maybe check for execution writes
+            std::string dir = dir_name(loc.file);
+            std::string abs_file = file;
+            if (dir.length() > 0)
+                abs_file = dir + abs_file;
+
+            std::string results = exec_cmd(abs_file.c_str());
+
+            // Now that we have the jsonlang result the simplest thing is to write to the
+            std::ofstream jsonlang_file;
+            jsonlang_file.open(abs_file+".jsonlang", std::ios::trunc);
+            if (results.length() > 0) {
+                jsonlang_file << results;
+            } else {
+                jsonlang_file << "{}";
+            }
+            jsonlang_file.close();
+
+            return import(loc, file + ".jsonlang");
+        }
+
+        /** exec_cmd is used internally to support the exec call. Could change popen to _popen for windows.
+        * \param cmd The command to be executed.
+        */
+        std::string exec_cmd(const char* cmd) {
+            FILE* pipe = popen(cmd, "r");
+            if (!pipe)
+                return "";
+
+            char buffer[4096];
+            std::string result = "";
+            while(!feof(pipe)) {
+            	if(fgets(buffer, 4096, pipe) != NULL)
+            		result += buffer;
+            }
+            pclose(pipe);
+            return result;
+        }
+
         /** Import another Jsonlang file.
          *
          * If the file has already been imported, then use that version.  This maintains
@@ -667,11 +741,10 @@ namespace {
         const std::string *importString(const LocationRange &loc, const std::string &file)
         {
             std::string dir = dir_name(loc.file);
-
             std::pair<std::string, std::string> key(dir, file);
             const std::string *str = cachedImports[key];
-            if (str != nullptr) return str;
-
+            if (str != nullptr)
+                return str;
 
             int success = 0;
             char *content =
@@ -1000,6 +1073,14 @@ namespace {
                     unsigned offset;
                     stack.getSelfBinding(self, offset);
                     scratch = makeClosure(env, self, offset, ast.parameters, ast.body);
+                } break;
+
+                case AST_EXEC: {
+                    const auto &ast = *static_cast<const Exec*>(ast_);
+                    AST *expr = exec(ast.location, ast.file);
+                    ast_ = expr;
+                    stack.newCall(ast.location, nullptr, nullptr, 0, BindingFrame());
+                    goto recurse;
                 } break;
 
                 case AST_IMPORT: {
