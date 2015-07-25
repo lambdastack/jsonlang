@@ -280,12 +280,27 @@ Alice &amp; Bob
 
 <li><a href="" onclick='replace(this) ; return false;'>
 Tutorial code: bar_menu.1.jsonlang
-<span class="example-code">/* bar_menu.1.jsonlang */
-local node = import &#34;ohai.jsonlang&#34;;
+<span class="example-code">
+Copyright 2015 Google Inc. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+local node = exec &#34;ohai&#34;;
 {
     local installed = false,
     local os = if node[&#34;os&#34;] == &#34;darwin&#34; then &#34;Mac&#34; else &#34;Linux&#34;,
-    test:: import &#34;ohai.jsonlang&#34;,
+    local iqstack = self,
 
     &#34;Mac&#34;: {
     cocktails: {
@@ -293,7 +308,7 @@ local node = import &#34;ohai.jsonlang&#34;;
         pip: {
             package: &#34;rally&#34;,
             state: if installed then &#34;present&#34; else &#34;absent&#34;,
-            mode: &#34;&#34;,
+            mode: node[&#34;os&#34;],
             sudo: &#34;true&#34;,
         },
         &#34;Tom Collins&#34;: {
@@ -307,6 +322,7 @@ local node = import &#34;ohai.jsonlang&#34;;
             garnish: &#34;Maraschino Cherry&#34;,
             served: &#34;Tall&#34;,
         },
+        network_interfaces: node.network.interfaces,
         Manhattan: {
             ingredients: [
                 { kind: &#34;Rye&#34;, qty: 2.5 },
