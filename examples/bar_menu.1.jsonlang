@@ -13,16 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
+//    [if node.os == "darwin" then "Mac OSX"]:
 /* bar_menu.1.jsonlang */
+local node = import "ohai.jsonlang";
 {
     local installed = false,
+    local os = if node["os"] == "darwin" then "Mac" else "Linux",
+    test:: import "ohai.jsonlang",
+
+    "Mac": {
     cocktails: {
         // Ingredient quantities are in fluid ounces.
         pip: {
             package: "rally",
             state: if installed then "present" else "absent",
-            mode: "{{mode}}",
+            mode: "",
             sudo: "true",
         },
         "Tom Collins": {
@@ -40,10 +45,12 @@ limitations under the License.
             ingredients: [
                 { kind: "Rye", qty: 2.5 },
                 { kind: "Sweet Red Vermouth", qty: 1 },
-                { kind: "Angostura", qty: "dash" },
+                { kind: $.Mac.cocktails.pip.package, qty: "dash" },
             ],
             garnish: "Maraschino Cherry",
             served: "Straight Up",
+            something: $["Mac"]["cocktails"]["pip"],
         },
+    }
     }
 }

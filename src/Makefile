@@ -54,12 +54,12 @@ parser.cpp: std.jsonlang.h
 # Object files
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
-	cp $@ python/
+	$(CP) $@ python/
 
 # Commandline executable.
 jsonlang: jsonlang.cpp $(LIB_OBJ)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $< $(LIB_SRC:.cpp=.o) -o $@
-	mv jsonlang ../bin
+	$(CP) $@ ../bin
 
 # C binding.
 libjsonlang.so: $(LIB_OBJ)
@@ -70,7 +70,7 @@ libjsonlang.js: $(LIB_SRC) $(ALL_HEADERS)
 	$(EMCXX) -s 'EXPORTED_FUNCTIONS=["_jsonlang_make", "_jsonlang_evaluate_snippet", "_jsonlang_realloc", "_jsonlang_destroy"]' $(EMCXXFLAGS) $(LDFLAGS) $(LIB_SRC) -o $@
 
 # Copy javascript build to doc directory
-doc/libjsonlang.js: libjsonlang.js
+../docs/libjsonlang.js: libjsonlang.js
 	$(CP) $^ $@
 
 # Tests for C binding.
