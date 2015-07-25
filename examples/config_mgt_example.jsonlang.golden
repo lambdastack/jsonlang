@@ -1,0 +1,117 @@
+{
+   "my_machine": {
+      "Network_Interfaces": {
+         "awdl0": {
+            "addresses": {
+               "8e:8c:8f:ea:95:17": {
+                  "family": "lladdr"
+               },
+               "fe80::8c9d:8bff:feea:8988": {
+                  "family": "inet6",
+                  "prefixlen": "64",
+                  "scope": "Link"
+               }
+            },
+            "encapsulation": "Ethernet",
+            "flags": [
+               "UP",
+               "BROADCAST",
+               "RUNNING",
+               "PROMISC",
+               "SIMPLEX",
+               "MULTICAST"
+            ],
+            "mtu": "1452",
+            "number": "0",
+            "type": "awdl"
+         },
+         "bridge0": {
+            "addresses": {
+               "ba:f8:b1:88:11:10": {
+                  "family": "lladdr"
+               }
+            },
+            "encapsulation": "Ethernet",
+            "flags": [
+               "UP",
+               "BROADCAST",
+               "SMART",
+               "RUNNING",
+               "SIMPLEX",
+               "MULTICAST"
+            ],
+            "mtu": "1500",
+            "number": "0",
+            "type": "bridge"
+         },
+         "en0": {
+            "addresses": {
+               "10.0.0.60": {
+                  "broadcast": "10.0.0.255",
+                  "family": "inet",
+                  "netmask": "255.255.255.0"
+               },
+               "b8:f6:b2:10:05:65": {
+                  "family": "lladdr"
+               },
+               "fe80::baf6:b1ff:fe16:159": {
+                  "family": "inet6",
+                  "prefixlen": "64",
+                  "scope": "Link"
+               }
+            },
+            "arp": {
+               "10.0.0.1": "74:d0:2b:65:12:d8",
+               "169.201.150.0": "28:e1:18:8e:c6:c0",
+               "169.201.80.1": "c5:69:90:64:e8:64"
+            },
+            "encapsulation": "Ethernet",
+            "flags": [
+               "UP",
+               "BROADCAST",
+               "SMART",
+               "RUNNING",
+               "SIMPLEX",
+               "MULTICAST"
+            ],
+            "mtu": "1500",
+            "number": "0",
+            "type": "en"
+         },
+         "lo0": {
+            "addresses": {
+               "127.0.0.1": {
+                  "family": "inet",
+                  "netmask": "255.0.0.0"
+               },
+               "::1": {
+                  "family": "inet6",
+                  "prefixlen": "128",
+                  "scope": "Node"
+               },
+               "fe80::1": {
+                  "family": "inet6",
+                  "prefixlen": "64",
+                  "scope": "Link"
+               }
+            },
+            "encapsulation": "Loopback",
+            "flags": [
+               "UP",
+               "LOOPBACK",
+               "RUNNING",
+               "MULTICAST"
+            ],
+            "mtu": "16384",
+            "number": "0",
+            "type": "lo"
+         },
+      },
+      "OS": "darwin",
+      "OS_another_way": "darwin",
+      "jsonlang": {
+         "os": "Mac",
+         "state": "present"
+      }
+   }
+}

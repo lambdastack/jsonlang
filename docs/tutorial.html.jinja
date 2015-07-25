@@ -39,6 +39,25 @@ extra commas are allowed but not required.  Jsonlang also allows both C and C++ 
 </tr>
 </table>
 
+<h2>Example of calling Ohai</h2>
+<p>This is a simple syntax for showing how to use the <code>exec</code> command that calls Ohai (Fact gathering product from Chef that is included in this distribution). Ohai returns json data so it can be easily referenced.</p>
+
+<table>
+<tr>
+<td><span class="TableHeader">Input (Jsonlang)</span></td>
+<td><span class="TableHeader">Output (JSON)</span></td>
+</tr>
+<tr>
+<td>
+<pre><code>{{ myinclude('../examples/config_mgt_example.jsonlang') }}</code></pre>
+</td>
+<td>
+<pre><code>{{ myinclude('../examples/config_mgt_example.jsonlang.golden') }}</code></pre>
+</td>
+</tr>
+</table>
+<p>Note: Your output from the above jsonlang file will be different.</p>
+
 <h2>References</h2>
 
 <p> To avoid duplication, one part of the structure can refer to another part.  There is a keyword
