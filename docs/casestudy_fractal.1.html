@@ -235,7 +235,7 @@ fault-tolerant.</p>
 <img src="fractal_architecture.png">
 
 <p>The Application Server hosts static content (CSS) and Jinja'd HTML.  The <a
-href="https://github.com/iqstack/jsonlang/blob/master/case_studies/fractal/appserv/templates/page.html">HTML</a> contains Javascript that issues AJAX
+href="https://github.com/iqstack/jsonlang/blob/master/examples/case_studies/fractal/appserv/templates/page.html">HTML</a> contains Javascript that issues AJAX
 requests to 1) the Tile Generating Service and 2) the Application Server (to fetch / amend the
 discoveries list).  The Application Server therefore does not communicate directly with the fractal
 Tile Generating Service, but it needs to know the host:port endpoint in order to embed it in the
@@ -244,10 +244,10 @@ Cassandra database.</p>
 
 <p>Both the Application server and the tile generation service use Nginx, uWSGI and flask to host
 their content.  For the application Server, this means transforming HTTP requests into database
-accesses and/or serving content (code <a href="https://github.com/iqstack/jsonlang/blob/master/case_studies/fractal/appserv/main.py">here</a>).  For
+accesses and/or serving content (code <a href="https://github.com/iqstack/jsonlang/blob/master/examples/case_studies/fractal/appserv/main.py">here</a>).  For
 the tile generation service, this means invoking a compiled C++ <a
-href="https://github.com/iqstack/jsonlang/blob/master/case_studies/fractal/tilegen/mandelbrot.cpp">executable</a> from the Flask <a
-href="https://github.com/iqstack/jsonlang/blob/master/case_studies/fractal/tilegen/mandelbrot_service.py">handler</a> in order to construct a PNG for
+href="https://github.com/iqstack/jsonlang/blob/master/examples/case_studies/fractal/tilegen/mandelbrot.cpp">executable</a> from the Flask <a
+href="https://github.com/iqstack/jsonlang/blob/master/examples/case_studies/fractal/tilegen/mandelbrot_service.py">handler</a> in order to construct a PNG for
 a given tile / thumbnail of the fractal.  Both services consist of a group of <a
 href="https://cloud.google.com/compute/docs/instances">instances</a> behind a <a
 href="https://cloud.google.com/compute/docs/load-balancing/network/">layer 3 cloud load balancer</a>
