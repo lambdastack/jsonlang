@@ -88,7 +88,7 @@
   },
   {
     'name': 'storage.type.jsonlang'
-    'match': '\\b(import|importstr)\\b'
+    'match': '\\b(import|importstr|exec)\\b'
   },
   {
     'name': 'keyword.other.jsonlang'

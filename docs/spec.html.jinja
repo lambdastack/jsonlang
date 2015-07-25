@@ -201,6 +201,10 @@ and + have their usual meaning, i.e. repetition without commas.  </p>
 <i>expr</i>
 
 </td></tr> <tr><td></td><td> | </td><td>
+'<code>exec</code>'
+<i>string</i>
+
+</td></tr> <tr><td></td><td> | </td><td>
 '<code>import</code>'
 <i>string</i>
 
@@ -447,6 +451,16 @@ imported Jsonlang file is parsed and statically checked in isolation.  Therefore
 import is not affected by the environment into which it is imported.  The files are cached by
 filename, so that even if the file changes on disk during Jsonlang execution, referential
 transparency is maintained.</p>
+
+<p>A new <code>exec</code> instruction set was added that behaves exactly like <code>import</code> except
+it will attempt to execute the file or command (executable, script, etc) first. The executable/script can be in any
+language with only one rule, it must return json data or jsonlang file. If there is no data to return then
+it must return <code>{}</code> to signal no data was found. If an executable has a .jsonlang extension then
+the file will be processed like <code>import</code>. In fact, once the data is returned from the executable
+it is passed through <code>import</code> so all <code>import</code> rules apply. Also, if the executable is in
+your $PATH then simply provide the name or you may need to provide an explicit path. For example,
+<code>exec "my_custom_script";</code> or <code>exec "python my_custom_python_script.py";</code>. The point is,
+the output of <whatever you pass> will need to return data formatted in json or jsonlang.</p>
 
 <h3>Desugaring</h3>
 

@@ -1,5 +1,6 @@
-##JsonLang - The data templating language
+##JsonLang - The JSON data manipulation language and built-in configuration management.
+
 
 Website: http://iqstack.github.io/jsonlang/
 
-Based on the Jsonnet project at https://github.com/google/jsonnet/
+*See NOTICE for contributions and Copyrights for the products/libraries used.
