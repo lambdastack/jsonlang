@@ -236,6 +236,7 @@ div.rules {
 \newcommand{\false}{\texttt{false}}
 \newcommand{\function}[2]{\texttt{function(}#1\texttt{)} #2}
 \newcommand{\if}[3]{\texttt{if }#1\texttt{ then }#2\texttt{ else }#3}
+\newcommand{\exec}[1]{\texttt{exec }#1}
 \newcommand{\import}[1]{\texttt{import }#1}
 \newcommand{\importstr}[1]{\texttt{importstr }#1}
 \newcommand{\index}[2]{#1\texttt{[}#2\texttt{]}}
@@ -647,7 +648,7 @@ the file will be processed like <code>import</code>. In fact, once the data is r
 it is passed through <code>import</code> so all <code>import</code> rules apply. Also, if the executable is in
 your $PATH then simply provide the name or you may need to provide an explicit path. For example,
 <code>exec "my_custom_script";</code> or <code>exec "python my_custom_python_script.py";</code>. The point is,
-the output of <whatever you pass> will need to return data formatted in json or jsonlang.</p>
+the output of "whatever you pass" will need to return data formatted in json or jsonlang.</p>
 
 <h3>Desugaring</h3>
 
@@ -935,6 +936,11 @@ x ∈ Γ
 ∀ i,j: x_i = x_j ⇒ i = j
 } {
 Γ ⊢ \function{x_1\ldots x_n}{e}
+} \] </div>
+
+<div class="sequent-rule"> \[\rule{chk-exec} {
+} {
+Γ ⊢ \exec{s}
 } \] </div>
 
 <div class="sequent-rule"> \[\rule{chk-import} {
