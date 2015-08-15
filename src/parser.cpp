@@ -880,7 +880,6 @@ AST *jsonlang_parse(Allocator *alloc, const std::string &file, const char *input
     return wrapped;
 }
 
-//case '\'': ss << "\\\'"; break;
 
 std::string jsonlang_unparse_escape(const std::string &str)
 {

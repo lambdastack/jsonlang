@@ -39,7 +39,9 @@ limitations under the License.
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <stdio.h>
+#include <uuid/uuid.h>
 
 #include "parser.h"
 #include "state.h"
@@ -662,12 +664,135 @@ namespace {
          * \param loc Location of the exec statement.
          * \param file Path to the filename.
          */
-        AST *exec(const LocationRange &loc, const std::string &file)
+        AST *exec(const LocationRange &loc, const std::string &cmd)
         {
-            // If the file name contains .jsonlang then it is assumed to be a jsonlang file so issue and import.
-            if (file.find(".jsonlang") != std::string::npos)
-                return import(loc, file);
+            //std::string dir = dir_name(loc.file);
+            //if (dir.length() > 0)
+            //    abs_file = dir + abs_file;
 
+            // Cmd should be in $PATH
+            std::string results = exec_cmd(cmd.c_str());
+
+            // Now that we have the jsonlang result the simplest thing is to write to the
+            std::ofstream jsonlang_file;
+            std::string uuid = uuidgen();
+            std::size_t pos = cmd.find(" ");
+            std::string new_cmd = cmd.substr(0, pos);
+            std::string new_file = new_cmd + "-" + uuid + ".jsonlang";
+            jsonlang_file.open(new_file, std::ios::trunc);
+            if (results.length() > 0) {
+                if ( results['{'] == 0) {
+                    // Assume json data so process as normal
+                    jsonlang_file << results;
+                } else {
+                    std::string new_output = "{\"" + new_cmd + "\": [";
+                    std::istringstream iss(results);
+                    for (std::string line; std::getline(iss, line);) {
+                        new_output += line_escape(line) + ", ";
+                    }
+                    new_output += "]}";
+                    jsonlang_file << new_output;
+                }
+            } else {
+                jsonlang_file << "{}";
+            }
+            jsonlang_file.close();
+
+            auto *expr = import(loc, new_file);
+
+            remove(new_file.c_str());
+            return expr;
+        }
+
+        std::string line_escape(const std::string &str)
+        {
+            std::stringstream ss;
+            ss << '\"';
+            for (std::size_t i=0 ; i<str.length() ; ++i) {
+                char c = str[i];
+                switch (c) {
+                    case '"': ss << "\\\""; break;
+                    case '\\': ss << "\\\\"; break;
+                    case '\b': ss << "\\b"; break;
+                    case '\f': ss << "\\f"; break;
+                    //case '\n': ss << "\\n"; break;
+                    case '\n': ss << ""; break; 
+                    case '\r': ss << "\\r"; break;
+                    case '\t': ss << "\\t"; break;
+                    case '\0': ss << "\\u0000"; break;
+                    default: {
+                        //if (c < 0x20 || c > 0x7e) {
+                            ////Unprintable, use \u
+                            //ss << "\\u" << std::hex << std::setfill('0') << std::setw(4)
+                            //   << unsigned((unsigned char)(c));
+                        //} else {
+                            // Printable, write verbatim
+                            ss << c;
+                        //}
+                    }
+                }
+            }
+            ss << '\"';
+            return ss.str();
+        }
+
+        std::string uuidgen()
+        {
+            uuid_t id;
+            uuid_generate(id);
+            char *uniq = new char[100];
+            char buff[100];
+            uuid_unparse(id, uniq);
+            sprintf(buff, "%s", uniq);
+            std::string new_file = buff;
+            free(uniq);
+            return new_file;
+        }
+
+        /** exec_import - Used by import to execute a non json/jsonlang/http value.
+        * \param loc Location of the exec statement.
+        * \param file Path to the filename.
+        */
+        std::string *http_import(const LocationRange &loc, const std::string &file)
+        {
+            // May need to add to libjsonlang so as to be supported in other languages.
+            // Could maybe check for execution writes
+            std::string cmd = file;
+            std::string dir = dir_name(loc.file);
+            if (file.find("curl ") == std::string::npos)
+                cmd = "curl --silent " + cmd;
+
+            std::string results = exec_cmd(cmd.c_str());
+
+            // Now that we have the jsonlang result the simplest thing is to write to the
+            std::ofstream jsonlang_file;
+
+            uuid_t id;
+            uuid_generate(id);
+            char *uniq = new char[100];
+            char buff[180];
+            uuid_unparse(id, uniq);
+            sprintf(buff, "%s%s", uniq, ".jsonlang");
+            std::string new_file = buff;
+            free(uniq);
+
+            jsonlang_file.open(dir + new_file.c_str(), std::ios::trunc);
+            if (results.length() > 0) {
+                jsonlang_file << results;
+            } else {
+                jsonlang_file << "{}";
+            }
+            jsonlang_file.close();
+
+            return new std::string(new_file);
+        }
+
+        /** exec_import - Used by import to execute a non json/jsonlang/http value.
+        * \param loc Location of the exec statement.
+        * \param file Path to the filename.
+        */
+        std::string *exec_import(const LocationRange &loc, const std::string &file)
+        {
             // May need to add to libjsonlang so as to be supported in other languages.
             // Could maybe check for execution writes
             std::string dir = dir_name(loc.file);
@@ -687,7 +812,8 @@ namespace {
             }
             jsonlang_file.close();
 
-            return import(loc, file + ".jsonlang");
+            std::string new_file = file + ".jsonlang";
+            return new std::string(new_file);
         }
 
         /** exec_cmd is used internally to support the exec call. Could change popen to _popen for windows.
@@ -708,7 +834,7 @@ namespace {
             return result;
         }
 
-        /** Import another Jsonlang file.
+        /** Import another Jsonlang file. Lazy execution! It only gets called if referenced in jsonlang file!
          *
          * If the file has already been imported, then use that version.  This maintains
          * referential transparency in the case of writes to disk during execution.
@@ -718,19 +844,48 @@ namespace {
          */
         AST *import(const LocationRange &loc, const std::string &file)
         {
-            std::string dir = dir_name(loc.file);
-            const std::string *input = importString(loc, file);
+            int process;
+            const std::string *new_file;
 
-            std::string abs_file = file;
+            if (file.find(".json") != std::string::npos) {
+                process = 0; // Default of .jsonlang or .json file
+                new_file = new std::string(file);
+            }
+            else {
+                if (file.find("http") != std::string::npos)
+                    process = 1;
+                else
+                    process = 2;
+            }
+
+            // Make http(s) call and return json or jsonlang
+            if (process == 1) {
+                new_file = http_import(loc, file);
+            }
+
+            // Execute and return json or jsonlang
+            if (process == 2) {
+                new_file = exec_import(loc, file);
+            }
+
+            std::string dir = dir_name(loc.file);
+            const std::string *input = importString(loc, *new_file);
+
+            std::string abs_file = new_file->c_str();
             if (dir.length() > 0)
                 abs_file = dir + abs_file;
 
             auto *expr = jsonlang_parse(alloc, abs_file, input->c_str());
             jsonlang_static_analysis(expr);
+
+            if (process != 0) {
+                remove(new_file->c_str());
+            }
+
             return expr;
         }
 
-        /** Import a file as a string.
+        /** Import a file as a string. Lazy execution! It only gets called if referenced in jsonlang file!
          *
          * If the file has already been imported, then use that version.  This maintains
          * referential transparency in the case of writes to disk during execution.

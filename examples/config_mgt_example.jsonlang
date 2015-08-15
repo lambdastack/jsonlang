@@ -14,13 +14,74 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-local node = exec "ohai";
+// import, exec calls are Lazy. Meaning, they only get called if they are actually used in Jsonlang.
+// If you do not use the variable where the results are returned then the parser will skip the call.
+
+// Sample to show different ways of calling/importing external commands:
+// 1. import "json or jsonlang file"
+// 2. import "file to be executed - could be script or executable in any language"
+// 3. import "http://whatever.com" - same as number two but is an http(s) call or curl command
+// 4. exec "execute command or any non json/jsonlang returning file". For example:
+// exec "ps aux | grep sbin". This will do the same thing as the command line BUT it gets formatted
+// into a json file. Meaning, the stdout that the command prints out is added as a json string array
+// with "ps" as the label (i.e., {"ps": ["sbin/...", "some other output"]}).
+// Important: ALL import types MUST return a json or jsonlang output! If not then an error will result.
+// The exec will execute whatever is passed and check for json return value. If the returned value is
+// not json then the returned results will be put into a json format automatically and the json
+// data can be accessed by using the label. The label is the first word of the command (see example
+// above). The results are also in a json array.
+// Note: If you want the lines of the array to have '\n' appended like a text file then run them
+// through the std.lines(arr) function of the built-in std library.
+
+# Also, you can used 3 types of comments :) - # // /* */
+# local python = exec "python sample_python.py"  - As long as the results are always json or jsonlang.
+
+/* This example is for illustration pupose only and has no other meaning. */
+
+local node = import "ohai";
+local python = import "python sample_python.py";
+local ls_out = import "http://www.google.com";
+local results = exec "cat case_studies/micro_fractal/tilegen/mandelbrot.cpp"; # "ps aux | grep sbin";
 {
     local installed = true,
+    // Example of inline conditon that resembles Python.
     local os = if node["os"] == "darwin" then "Mac" else "Linux",
     local iqstack = self,
 
-    my_machine: {
+    server01: {
+        directories: [
+            {
+            group01: [
+                {
+                path: "~/sample/" + node.current_user,
+                owner: "root",
+                group: "root",
+                }
+            ],
+            },
+        ],
+        file: {
+            name: "test.txt",
+            path: "~/sample/" + node.current_user,
+            owner: "root",
+            group: "root",
+        },
+        resources: [
+            {
+            name: "directory listing",
+            command: "ls",
+            type: "shell",
+            sudo: true,
+            },
+            {
+            name: "list wide",
+            commands:
+                ["ls",
+                 "ls -l"],
+            type: "shell",
+            sudo: true,
+            },
+        ],
         jsonlang: {
             state: if installed then "present" else "absent",
             os: os,
@@ -28,5 +89,7 @@ local node = exec "ohai";
         "Network_Interfaces": node.network.interfaces,
         OS: node.os,
         OS_another_way: node["os"],
+        python: python.sample1,
+        cat: results.cat,
     }
 }

@@ -19,7 +19,7 @@ CXXFLAGS ?= -g -O3 -Wall -Wextra -pedantic -std=c++0x -fPIC
 CFLAGS ?= -g -O3 -Wall -Wextra -pedantic -std=c99 -fPIC
 EMCXXFLAGS = $(CXXFLAGS) --memory-init-file 0 -s DISABLE_EXCEPTION_CATCHING=0
 EMCFLAGS = $(CFLAGS) --memory-init-file 0 -s DISABLE_EXCEPTION_CATCHING=0
-LDFLAGS ?=
+LDFLAGS ?= 
 
 SHARED_LDFLAGS ?= -shared
 
